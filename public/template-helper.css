@@ -1,0 +1,140 @@
+/* Template Helper CSS - Unified Sidebar & Printing Settings */
+
+/* Glassmorphism sidebar container */
+.nav-helper-container {
+    position: fixed;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 20px 12px;
+    border-radius: 40px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+.nav-helper-container:hover {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Styled sidebar buttons */
+.nav-helper-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: #1a1a1a;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.nav-helper-btn:hover {
+    background: #4a77d4;
+    color: #ffffff;
+    transform: scale(1.12);
+    box-shadow: 0 6px 12px rgba(74, 119, 212, 0.4);
+}
+
+.nav-helper-btn:active {
+    transform: scale(0.95);
+}
+
+/* Tooltip on hover */
+.nav-helper-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 60px;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateX(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.nav-helper-btn:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Distinct color for save & logout buttons on hover */
+.nav-helper-btn[data-tooltip="Save Resume"]:hover {
+    background: #2ec4b6;
+    box-shadow: 0 6px 12px rgba(46, 196, 182, 0.4);
+}
+
+.nav-helper-btn[data-tooltip="Logout"]:hover {
+    background: #e71d36;
+    box-shadow: 0 6px 12px rgba(231, 29, 54, 0.4);
+}
+
+/* Print CSS to cleanly output only the resume */
+@media print {
+    /* Hide navigation bars, checkboxes, edit buttons, etc. */
+    .nav-helper-container,
+    .nav,
+    .input-checkbox,
+    input[type="checkbox"],
+    button,
+    .btn,
+    .btn-success,
+    .btn-danger,
+    .noPrint,
+    #cmd,
+    #skilladd,
+    #skillrem,
+    #langadd,
+    #langrem,
+    #achadd,
+    #achrem,
+    #Intadd,
+    #Intrem,
+    #eduadd,
+    #edurem,
+    #secadd,
+    #secrem,
+    header.site-header .container,
+    .btn-res {
+        display: none !important;
+    }
+
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+    }
+
+    #resume,
+    .resume,
+    .outer,
+    main {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}

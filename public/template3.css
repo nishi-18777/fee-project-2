@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  padding: 20px;
+}
+
+.resume {
+  display: flex;
+  max-width: 900px;
+  margin: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-section {
+  
+  background-color: #f5e1e1;
+  padding: 20px;
+}
+
+.right-section {
+  
+  padding: 20px;
+}
+
+h1, h2, h3 {
+  font-family: 'Georgia', serif;
+  color: #4a4a4a;
+}
+
+h1 {
+  font-size: 4em;
+}
+
+h3 {
+  font-size: 2.5em;
+  font-weight: normal;
+  color: #888;
+}
+
+.photo img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.contact, .social-media, .education, .skills, .profile, .work-experience, .awards {
+  margin-bottom: 20px;
+}
+
+.contact p, .social-media p, .education p, .skills ul, .work-experience p, .awards p {
+  font-size: 0.9em;
+  color: #555;
+}
+
+.skills ul {
+  list-style: none;
+}
+
+.skills li {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.right-section h2 {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.right-section p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.awards p {
+  margin-bottom: 10px;
+  color: #333;
+}
