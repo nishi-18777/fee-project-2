@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Pastel Card Resume</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/template-helper.css">
+    <style>
+        :root {
+            --page-bg: #eedec9; /* soft warm cream page bg from mockup */
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-gold: #c5a059; /* Gold text from mockup */
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Montserrat', 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--page-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #resume {
+            width: 100%;
+            max-width: 820px;
+            margin: 40px auto;
+            padding: 30px;
+            box-sizing: border-box;
+            min-height: 297mm; /* Standard A4 ratio */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            box-sizing: border-box;
+        }
+
+        /* HEADER CARD */
+        .header-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #fee2e2; /* soft pastel red circle */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            color: #f87171;
+            border: 2px dashed rgba(248, 113, 113, 0.4);
+        }
+
+        .header-title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .header-sub {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .header-title-block h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .header-loc {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .header-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .header-contact span {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .header-contact i {
+            color: var(--accent-gold);
+            width: 14px;
+            text-align: center;
+        }
+
+        /* CARD TITLE */
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+            margin: 0 0 15px 0;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        /* PROFILE */
+        .profile-text {
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* TWO COLUMNS BODY */
+        .body-grid {
+            display: grid;
+            grid-template-columns: 38% 62%;
+            gap: 20px;
+        }
+
+        .col-left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .col-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* SKILLS Progress Bars */
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .skill-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        /* EDUCATION & EXPERIENCE Items */
+        .item-entry {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 15px;
+        }
+
+        .item-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .entry-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .entry-meta {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .entry-desc {
+            font-size: 0.82rem;
+            line-height: 1.4;
+            color: var(--text-secondary);
+            margin: 0;
+            padding-left: 15px;
+        }
+
+        .entry-desc li {
+            margin-bottom: 3px;
+        }
+
+        /* LOWER ROW (AWARDS & INTERESTS) */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            gap: 20px;
+        }
+
+        .interests-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .icon-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        /* PRINT STYLING OVERRIDES */
+        @media print {
+            body {
+                background-color: var(--page-bg) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            #resume {
+                margin: 0 !important;
+                padding: 20px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .card {
+                box-shadow: none !important;
+                border: 1px solid rgba(0,0,0,0.05) !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="resume">
+        <!-- HEADER CARD -->
+        <div class="card header-card">
+            <div class="header-left">
+                <div class="header-icon-circle">
+                    <i class="fa-solid fa-feather-pointed"></i>
+                </div>
+                <div class="header-title-block">
+                    <span class="header-sub">Creative Designer</span>
+                    <h1 contenteditable="true" id="resume-name">Alexa Reed</h1>
+                    <span class="header-loc" contenteditable="true" id="resume-location">Montserrat</span>
+                </div>
+            </div>
+            <div class="header-contact" contenteditable="true" id="resume-contact">
+                <span>+123 456-7890 <i class="fa-solid fa-phone"></i></span>
+                <span>info@alexareed.com <i class="fa-solid fa-envelope"></i></span>
+                <span>www.website.com <i class="fa-solid fa-globe"></i></span>
+                <span>Montserrat, NA <i class="fa-solid fa-location-dot"></i></span>
+            </div>
+        </div>
+
+        <!-- PROFILE CARD -->
+        <div class="card">
+            <h3 class="card-title">Profile</h3>
+            <p class="profile-text" contenteditable="true" id="resume-profile">
+                I am a friendly, easy-going creative professional with strong background design capabilities. Experienced in web and graphic design, branding, and customer development, with a passion for creative and clean solutions.
+            </p>
+        </div>
+
+        <!-- BODY GRID -->
+        <div class="body-grid">
+            <!-- LEFT COLUMN -->
+            <div class="col-left">
+                <!-- SKILLS -->
+                <div class="card">
+                    <h3 class="card-title">Skills</h3>
+                    <div contenteditable="true" id="resume-skills">
+                        <div class="skill-item">
+                            <span class="skill-name">UI/UX Design</span>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 80%; background-color: #93c5fd;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Branding</span>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 75%; background-color: #99f6e4;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Typography</span>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 85%; background-color: #a7f3d0;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Adobe CC</span>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 90%; background-color: #fef08a;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Figma</span>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 70%; background-color: #fca5a5;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EDUCATION -->
+                <div class="card">
+                    <h3 class="card-title">Education</h3>
+                    <div class="item-list" contenteditable="true" id="resume-education">
+                        <div class="item-entry">
+                            <span class="entry-title">BA Graphic Design</span>
+                            <span class="entry-meta">School (2019 – 2019)</span>
+                            <span class="entry-meta">Years, Degree</span>
+                        </div>
+                        <div class="item-entry">
+                            <span class="entry-title">Design Certificate</span>
+                            <span class="entry-meta">School (2017 – 2019)</span>
+                            <span class="entry-meta">Years, Degree</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="col-right">
+                <!-- EXPERIENCE -->
+                <div class="card">
+                    <h3 class="card-title">Experience</h3>
+                    <div class="item-list" contenteditable="true" id="resume-experience">
+                        <div class="item-entry">
+                            <span class="entry-title">SENIOR DESIGNER – Bright Creative</span>
+                            <span class="entry-meta">(2019–Present)</span>
+                            <ul class="entry-desc">
+                                <li>Key responsibilities to complete, typography, and graphic assignment.</li>
+                                <li>Employed key creative strategies to design for clients.</li>
+                                <li>Empowered quality designs and development processes.</li>
+                                <li>Achievements complete about designer and customer relationships.</li>
+                            </ul>
+                        </div>
+                        <div class="item-entry">
+                            <span class="entry-title">GRAPHIC DESIGNER – Studio Novo</span>
+                            <span class="entry-meta">(2017–2019)</span>
+                            <ul class="entry-desc">
+                                <li>Key responsibilities to both graphic designing and creator representations.</li>
+                                <li>Empowered opportunities and creative directions.</li>
+                                <li>Achievement-tailored organizational and development workflow.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM GRID -->
+        <div class="bottom-grid">
+            <!-- AWARDS -->
+            <div class="card">
+                <h3 class="card-title">Awards</h3>
+                <div contenteditable="true" id="resume-awards">
+                    <div class="item-entry">
+                        <span class="entry-title">Standard Recognition Designed Winner</span>
+                        <span class="entry-meta">Designed Winner</span>
+                    </div>
+                    <div class="item-entry">
+                        <span class="entry-title">Standard Recognition Winners</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INTERESTS -->
+            <div class="card">
+                <h3 class="card-title">Interests</h3>
+                <div class="interests-icons" contenteditable="true" id="resume-interests">
+                    <div class="icon-badge" style="background-color: #93c5fd;"><i class="fa-solid fa-palette"></i></div>
+                    <div class="icon-badge" style="background-color: #99f6e4;"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="icon-badge" style="background-color: #fef08a;"><i class="fa-solid fa-mug-hot"></i></div>
+                    <div class="icon-badge" style="background-color: #fca5a5;"><i class="fa-solid fa-fire"></i></div>
+                    <div class="icon-badge" style="background-color: #c084fc;"><i class="fa-solid fa-cookie"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script dependency -->
+    <script src="js/template-helper.js"></script>
+</body>
+</html>

@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        (function() {
+            const hasCookieToken = document.cookie.split(';').some(c => c.trim().startsWith('token='));
+            const localUser = localStorage.getItem('currentUser');
+            const isStandalone = window.location.protocol === 'file:' || !hasCookieToken;
+            if (isStandalone && !localUser) {
+                window.location.href = 'login page.html';
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Card Hover Effect</title>
-    <link rel="stylesheet" href="tmp.css">
+    <link rel="stylesheet" href="css/tmp.css">
 </head>
 <body>
     <!-- Section for selecting template -->
@@ -15,7 +25,7 @@
     <!-- Container for cards -->
     <div class="container">
         <div class="card">
-            <img src="pic 1.png" alt="Card Image">
+            <img src="assets/pic 1.png" alt="Card Image">
             <br>
             <br>
             <div class="card-content">
@@ -24,7 +34,7 @@
             </div>
         </div>
         <div class="card">
-            <img src="pic 2.png" alt="Card Image">
+            <img src="assets/pic 2.png" alt="Card Image">
             <br>
             <br>
             <br>
@@ -34,7 +44,7 @@
             </div>
         </div>
         <div class="card">
-            <img src="pic 3.png" alt="Card Image">
+            <img src="assets/pic 3.png" alt="Card Image">
             <BR>
             <BR>
              <BR>
@@ -46,7 +56,7 @@
         </div>
         <!-- New row of cards -->
         <div class="card">
-            <img src="pic 4.png" alt="Card Image">
+            <img src="assets/pic 4.png" alt="Card Image">
             <br>
             <br>
             <br>
@@ -56,13 +66,57 @@
             </div>
         </div>
         <div class="card">
-            <img src="pic 5.png" alt="Card Image">
+            <img src="assets/PIC 5.png" alt="Card Image">
             <br>
             <br>
             <br>
             <div class="card-content">
                 <p>INFOGRAPHIC RESUME.</p>
                 <a href="template5.html">Template 5</a>
+            </div>
+        </div>
+        <!-- Template 6 -->
+        <div class="card">
+            <img src="assets/minimalist_editorial_resume.jpg" alt="Card Image">
+            <br>
+            <br>
+            <br>
+            <div class="card-content">
+                <p>SWISS MINIMALIST RESUME.</p>
+                <a href="template6.html">Template 6</a>
+            </div>
+        </div>
+        <!-- Template 7 -->
+        <div class="card">
+            <img src="assets/twocolumn_elegant_a4_resume.jpg" alt="Card Image">
+            <br>
+            <br>
+            <br>
+            <div class="card-content">
+                <p>TWO-COLUMN PROFESSIONAL RESUME.</p>
+                <a href="template7.html">Template 7</a>
+            </div>
+        </div>
+        <!-- Template 8 -->
+        <div class="card">
+            <img src="assets/bordered_creative_a4_resume.jpg" alt="Card Image">
+            <br>
+            <br>
+            <br>
+            <div class="card-content">
+                <p>CLASSIC NAVY BORDERED RESUME.</p>
+                <a href="template8.html">Template 8</a>
+            </div>
+        </div>
+        <!-- Template 9 -->
+        <div class="card">
+            <img src="assets/creative_pastel_card_resume.jpg" alt="Card Image">
+            <br>
+            <br>
+            <br>
+            <div class="card-content">
+                <p>CREATIVE PASTEL CARD RESUME.</p>
+                <a href="template9.html">Template 9</a>
             </div>
         </div>
     </div>

@@ -47,13 +47,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				const data = await response.json();
 				if (data.success) {
-					window.location.href = '/page2.html';
+					localStorage.setItem('currentUser', JSON.stringify({ username: data.user.username, email: data.user.email }));
+					window.location.href = 'page2.html';
 				} else {
 					errorDiv.textContent = data.message || 'Registration failed.';
 				}
 			} catch (err) {
-				console.error('Signup error:', err);
-				errorDiv.textContent = 'Network error. Please try again.';
+				console.warn('Signup server error, falling back to LocalStorage:', err);
+				
+				// LocalStorage Fallback
+				try {
+					const users = JSON.parse(localStorage.getItem('users') || '[]');
+					const existingUser = users.find(u => u.username.toLowerCase() === username.toLowerCase() || u.email.toLowerCase() === email.toLowerCase());
+					
+					if (existingUser) {
+						errorDiv.textContent = 'Username or email already exists (Local Mode).';
+						return;
+					}
+					
+					users.push({ username, email, password });
+					localStorage.setItem('users', JSON.stringify(users));
+					localStorage.setItem('currentUser', JSON.stringify({ username, email }));
+					
+					window.location.href = 'page2.html';
+				} catch (lsErr) {
+					console.error('LocalStorage error:', lsErr);
+					errorDiv.textContent = 'Network error. Local storage is also unavailable.';
+				}
 			}
 		});
 	}
@@ -84,13 +104,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				const data = await response.json();
 				if (data.success) {
-					window.location.href = '/page2.html';
+					localStorage.setItem('currentUser', JSON.stringify({ username: data.user.username, email: data.user.email }));
+					window.location.href = 'page2.html';
 				} else {
 					errorDiv.textContent = data.message || 'Invalid username or password.';
 				}
 			} catch (err) {
-				console.error('Signin error:', err);
-				errorDiv.textContent = 'Network error. Please try again.';
+				console.warn('Signin server error, falling back to LocalStorage:', err);
+				
+				// LocalStorage Fallback
+				try {
+					const users = JSON.parse(localStorage.getItem('users') || '[]');
+					const matchedUser = users.find(u => 
+						(u.username.toLowerCase() === username.toLowerCase() || u.email.toLowerCase() === username.toLowerCase()) && 
+						u.password === password
+					);
+					
+					if (matchedUser) {
+						localStorage.setItem('currentUser', JSON.stringify({ username: matchedUser.username, email: matchedUser.email }));
+						window.location.href = 'page2.html';
+					} else {
+						errorDiv.textContent = 'Invalid username or password (Local Mode).';
+					}
+				} catch (lsErr) {
+					console.error('LocalStorage error:', lsErr);
+					errorDiv.textContent = 'Network error. Local storage is also unavailable.';
+				}
 			}
 		});
 	}

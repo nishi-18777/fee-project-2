@@ -46,28 +46,10 @@ const protectPage = (fileName) => {
 
 // Route Redirects & Page Gates
 app.get('/', (req, res) => {
-  const token = req.cookies.token;
-  if (token) {
-    try {
-      jwt.verify(token, JWT_SECRET);
-      return res.redirect('/page2.html');
-    } catch (err) {
-      res.clearCookie('token');
-    }
-  }
   res.sendFile(path.join(__dirname, 'public', 'login page.html'));
 });
 
 app.get('/login page.html', (req, res) => {
-  const token = req.cookies.token;
-  if (token) {
-    try {
-      jwt.verify(token, JWT_SECRET);
-      return res.redirect('/page2.html');
-    } catch (err) {
-      res.clearCookie('token');
-    }
-  }
   res.sendFile(path.join(__dirname, 'public', 'login page.html'));
 });
 
@@ -79,6 +61,10 @@ app.get('/template2.html', protectPage('template2.html'));
 app.get('/template3.html', protectPage('template3.html'));
 app.get('/template4.html', protectPage('template4.html'));
 app.get('/template5.html', protectPage('template5.html'));
+app.get('/template6.html', protectPage('template6.html'));
+app.get('/template7.html', protectPage('template7.html'));
+app.get('/template8.html', protectPage('template8.html'));
+app.get('/template9.html', protectPage('template9.html'));
 
 // Serve assets and general static files
 app.use(express.static(path.join(__dirname, 'public')));

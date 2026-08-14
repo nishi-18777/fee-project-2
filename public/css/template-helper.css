@@ -9,20 +9,21 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(10, 22, 30, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 242, 254, 0.25);
     padding: 20px 12px;
     border-radius: 40px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 242, 254, 0.15);
     z-index: 9999;
     transition: all 0.3s ease;
 }
 
 .nav-helper-container:hover {
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+    background: rgba(10, 22, 30, 0.85);
+    border-color: rgba(0, 242, 254, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 242, 254, 0.3);
 }
 
 /* Styled sidebar buttons */
@@ -30,8 +31,8 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: none;
-    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05);
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -39,15 +40,16 @@
     cursor: pointer;
     font-size: 18px;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     position: relative;
 }
 
 .nav-helper-btn:hover {
-    background: #4a77d4;
-    color: #ffffff;
+    background: linear-gradient(135deg, #00b4db, #00f2fe);
+    color: #050d12;
     transform: scale(1.12);
-    box-shadow: 0 6px 12px rgba(74, 119, 212, 0.4);
+    border-color: #00f2fe;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
 }
 
 .nav-helper-btn:active {
@@ -59,19 +61,20 @@
     content: attr(data-tooltip);
     position: absolute;
     left: 60px;
-    background: #1a1a1a;
+    background: #0a161e;
+    border: 1px solid rgba(0, 242, 254, 0.3);
     color: #fff;
-    padding: 6px 10px;
+    padding: 6px 12px;
     border-radius: 6px;
     font-size: 12px;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: bold;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease, transform 0.2s ease;
     transform: translateX(-5px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3), 0 0 10px rgba(0, 242, 254, 0.15);
 }
 
 .nav-helper-btn:hover::after {
@@ -81,13 +84,24 @@
 
 /* Distinct color for save & logout buttons on hover */
 .nav-helper-btn[data-tooltip="Save Resume"]:hover {
-    background: #2ec4b6;
-    box-shadow: 0 6px 12px rgba(46, 196, 182, 0.4);
+    background: linear-gradient(135deg, #00b4db, #2ec4b6);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(46, 196, 182, 0.7);
+    border-color: #2ec4b6;
+}
+
+.nav-helper-btn[data-tooltip="Download PDF"]:hover {
+    background: linear-gradient(135deg, #00f2fe, #0072ff);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(0, 114, 255, 0.7);
+    border-color: #0072ff;
 }
 
 .nav-helper-btn[data-tooltip="Logout"]:hover {
-    background: #e71d36;
-    box-shadow: 0 6px 12px rgba(231, 29, 54, 0.4);
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 75, 43, 0.7);
+    border-color: #ff4b2b;
 }
 
 /* Print CSS to cleanly output only the resume */
@@ -120,10 +134,14 @@
         display: none !important;
     }
 
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
     body {
         margin: 0 !important;
         padding: 0 !important;
-        background: #ffffff !important;
     }
 
     #resume,

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swiss Minimalist Resume</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/template-helper.css">
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --resume-bg: #ffffff;
+            --text-primary: #000000;
+            --text-secondary: #374151;
+            --text-muted: #4b5563;
+            --accent-red: #e6193c; /* Stark crimson red from the image */
+            --border-color: #000000;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #resume {
+            width: 100%;
+            max-width: 820px;
+            margin: 40px auto;
+            background-color: var(--resume-bg);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 55px;
+            box-sizing: border-box;
+            min-height: 297mm; /* Standard A4 ratio */
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* HEADER NAME */
+        .header-name {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .header-name h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin: 0;
+            letter-spacing: -1.5px;
+            color: var(--text-primary);
+        }
+
+        /* COLUMNS */
+        .columns-container {
+            display: grid;
+            grid-template-columns: 36% 64%;
+            gap: 35px;
+            position: relative;
+        }
+
+        /* Vertical Divider Line */
+        .left-col {
+            border-right: 1.5px solid var(--border-color);
+            padding-right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .right-col {
+            padding-left: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* LEFT COLUMN ELEMENTS */
+        .job-title-sidebar {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .accent-bar {
+            width: 4px;
+            height: 65px;
+            background-color: var(--accent-red);
+            margin: 5px 0 0 0;
+        }
+
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .contact-details {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        .skills-category {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .skills-cat-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .skills-cat-items {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin: 0 0 10px 0;
+        }
+
+        /* RIGHT COLUMN ELEMENTS */
+        .right-section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin: 0 0 15px 0;
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .entry-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .entry {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .entry-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .entry-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .entry-desc {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: var(--text-secondary);
+            margin: 3px 0 0 0;
+        }
+
+        /* PRINT STYLING OVERRIDES */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+            }
+            #resume {
+                margin: 0 !important;
+                box-shadow: none !important;
+                padding: 40px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="resume">
+        <!-- HEADER NAME -->
+        <header class="header-name">
+            <h1 contenteditable="true" id="resume-name-1">ALEXANDER</h1>
+            <h1 contenteditable="true" id="resume-name-2">SCHMIDT</h1>
+        </header>
+
+        <!-- COLUMNS -->
+        <div class="columns-container">
+            <!-- LEFT COLUMN -->
+            <div class="left-col">
+                <div class="job-title-sidebar" contenteditable="true" id="resume-title">
+                    Graphic Designer |<br>Art Director
+                </div>
+                <div class="accent-bar"></div>
+                
+                <!-- CONTACT -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">CONTACT</h3>
+                    <div class="contact-details" contenteditable="true" id="resume-contact">
+                        alexander.schmidt@email.com<br>
+                        +49 176 1234 5678<br>
+                        Berlin, DE<br>
+                        alexander.schmidt.design
+                    </div>
+                </div>
+
+                <!-- SKILLS -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">SKILLS</h3>
+                    <div contenteditable="true" id="resume-skills">
+                        <div class="skills-category">
+                            <h4 class="skills-cat-title">DESIGN</h4>
+                            <p class="skills-cat-items">Brand Identity<br>UI/UX<br>Editorial<br>Motion</p>
+                        </div>
+                        <div class="skills-category">
+                            <h4 class="skills-cat-title">TOOLS</h4>
+                            <p class="skills-cat-items">InDesign<br>Illustrator<br>Figma<br>AE</p>
+                        </div>
+                        <div class="skills-category">
+                            <h4 class="skills-cat-title">ADOBE</h4>
+                            <p class="skills-cat-items">Ps, Ai, Id, Pr</p>
+                        </div>
+                        <div class="skills-category">
+                            <h4 class="skills-cat-title">LANGUAGES</h4>
+                            <p class="skills-cat-items">German<br>English<br>French</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="right-col">
+                <!-- EXPERIENCE -->
+                <section class="right-section">
+                    <h3 class="right-section-title">EXPERIENCE</h3>
+                    <div class="entry-group" contenteditable="true" id="resume-experience">
+                        <div class="entry">
+                            <div class="entry-title">SENIOR ART DIRECTOR / STUDIO BAUHAUS</div>
+                            <div class="entry-meta">Berlin, 2020 – Present</div>
+                            <div class="entry-desc">
+                                Led design team on high-profile branding projects<br>
+                                Developed comprehensive visual identities (e.g., LUFTHANSA, SIEMENS)<br>
+                                Managed editorial layout and print production
+                            </div>
+                        </div>
+                        <div class="entry">
+                            <div class="entry-title">GRAPHIC DESIGNER / ATELIER WERNER</div>
+                            <div class="entry-meta">Munich, 2017 – 2020</div>
+                            <div class="entry-desc">
+                                Executed digital and print campaigns<br>
+                                Created layouts for art publications
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EDUCATION -->
+                <section class="right-section">
+                    <h3 class="right-section-title">EDUCATION</h3>
+                    <div class="entry-group" contenteditable="true" id="resume-education">
+                        <div class="entry">
+                            <div class="entry-title">MA VISUAL COMMUNICATION / BAUHAUS-UNIVERSITÄT WEIMAR</div>
+                            <div class="entry-meta">2015 – 2017</div>
+                            <div class="entry-desc">
+                                Focus on experimental typography and grid systems
+                            </div>
+                        </div>
+                        <div class="entry">
+                            <div class="entry-title">BA DESIGN / UDK BERLIN</div>
+                            <div class="entry-meta">2011 – 2015</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PROJECTS -->
+                <section class="right-section">
+                    <h3 class="right-section-title">PROJECTS</h3>
+                    <div class="entry-group" contenteditable="true" id="resume-projects">
+                        <div class="entry">
+                            <div class="entry-title">"TYPE & SPACE"</div>
+                            <div class="entry-desc">Exhibition Layout</div>
+                            <div class="entry-meta">2022</div>
+                        </div>
+                        <div class="entry">
+                            <div class="entry-title">"URBAN GRID"</div>
+                            <div class="entry-desc">Digital Platform</div>
+                            <div class="entry-meta">2021</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script dependency -->
+    <script src="js/template-helper.js"></script>
+</body>
+</html>
