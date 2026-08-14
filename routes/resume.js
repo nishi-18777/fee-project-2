@@ -1,8 +1,11 @@
 const express = require('express');
 const Resume = require('../models/Resume');
 const authMiddleware = require('../middleware/auth');
+const dbCheck = require('../middleware/dbCheck');
 
 const router = express.Router();
+
+router.use(dbCheck);
 
 // Save Resume Data
 router.post('/save', authMiddleware, async (req, res) => {

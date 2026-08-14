@@ -300,6 +300,11 @@
 
     async function logoutUser() {
         try {
+            await saveResume();
+        } catch (e) {
+            console.warn('Final save failed during logout:', e);
+        }
+        try {
             const response = await fetch('/api/auth/logout', { method: 'POST' });
             const data = await response.json();
             localStorage.removeItem('currentUser');
@@ -391,10 +396,124 @@
         }, 3000);
     }
 
+    // Debounce helper
+    function debounce(func, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    // Auto-save logic
+    const debouncedAutoSave = debounce(async () => {
+        console.log('[Resume Spark Helper] Auto-saving...');
+        const resumeRoot = document.getElementById('resume');
+        if (!resumeRoot) return;
+
+        const htmlContent = resumeRoot.innerHTML;
+        try {
+            const response = await fetch('/api/resumes/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    templateId,
+                    htmlContent
+                })
+            });
+            const data = await response.json();
+            if (data.success) {
+                console.log('[Resume Spark Helper] Auto-save complete.');
+            }
+        } catch (err) {
+            console.warn('[Resume Spark Helper] Auto-save fetch failed, using local storage:', err);
+            try {
+                let currentUsername = 'guest';
+                const localUser = localStorage.getItem('currentUser');
+                if (localUser) {
+                    const parsed = JSON.parse(localUser);
+                    if (parsed && parsed.username) {
+                        currentUsername = parsed.username.toLowerCase();
+                    }
+                }
+                localStorage.setItem('resume_' + currentUsername + '_' + templateId, htmlContent);
+            } catch (lsErr) {
+                console.error('LocalStorage auto-save failed:', lsErr);
+            }
+        }
+    }, 2500);
+
+    // Responsive scaling check for mobile / tablet
+    function adjustResumeScale() {
+        const resumeRoot = document.getElementById('resume');
+        if (!resumeRoot) return;
+
+        if (window.matchMedia('print').matches) {
+            resumeRoot.style.transform = 'none';
+            resumeRoot.style.transformOrigin = 'initial';
+            resumeRoot.style.marginBottom = '0';
+            return;
+        }
+
+        const viewportWidth = window.innerWidth;
+        
+        // Reset transform to measure actual width
+        resumeRoot.style.transform = 'none';
+        resumeRoot.style.transformOrigin = 'initial';
+        resumeRoot.style.marginBottom = '0';
+
+        let targetWidth = resumeRoot.offsetWidth;
+        if (targetWidth === 0 || targetWidth > 1200) {
+            targetWidth = 800; // default template width fallback
+        }
+
+        if (viewportWidth < (targetWidth + 40)) {
+            const scaleFactor = (viewportWidth - 20) / targetWidth;
+            resumeRoot.style.transform = `scale(${scaleFactor})`;
+            resumeRoot.style.transformOrigin = 'top center';
+            
+            // Reclaim bottom gap space
+            const naturalHeight = resumeRoot.offsetHeight;
+            const scaledHeight = naturalHeight * scaleFactor;
+            const heightDiff = naturalHeight - scaledHeight;
+            resumeRoot.style.marginBottom = `-${heightDiff}px`;
+        } else {
+            resumeRoot.style.transform = 'none';
+            resumeRoot.style.transformOrigin = 'initial';
+            resumeRoot.style.marginBottom = '40px';
+        }
+    }
+
     // 5. Initialize helper on load
     document.addEventListener('DOMContentLoaded', async () => {
         // Load save data first, then inject sidebar
         await loadSavedResume();
         injectSidebar();
+
+        // Setup scaling
+        adjustResumeScale();
+        window.addEventListener('resize', adjustResumeScale);
+
+        // Setup Auto-save listeners
+        const resumeRoot = document.getElementById('resume');
+        if (resumeRoot) {
+            const handleUpdate = () => {
+                debouncedAutoSave();
+            };
+
+            resumeRoot.addEventListener('input', handleUpdate);
+            resumeRoot.addEventListener('change', handleUpdate);
+            resumeRoot.addEventListener('blur', handleUpdate, true);
+
+            // Observe programmatic changes (e.g. add/remove buttons modifying DOM)
+            const observer = new MutationObserver(handleUpdate);
+            observer.observe(resumeRoot, {
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
+        }
     });
 })();

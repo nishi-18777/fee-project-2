@@ -121,6 +121,10 @@
     .container {
       grid-template-columns: repeat(2, 1fr);
     }
+    
+    .template-selector h1 {
+      font-size: 2.2rem;
+    }
   }
   
   @media screen and (max-width: 480px) {
@@ -128,20 +132,21 @@
       grid-template-columns: 1fr;
     }
   
-    .template-selector h2 {
-      font-size: 1.5rem;
+    .template-selector h1 {
+      font-size: 1.6rem;
     }
   
     .card-content h3 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
   
     .card-content p {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
   
     .card-content a {
-      font-size: 1rem;
+      font-size: 0.9rem;
+      padding: 8px 16px;
     }
   }
   

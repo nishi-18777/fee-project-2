@@ -62,6 +62,9 @@
                             <span class="user-name">${currentUser.username}</span>
                             <span class="user-email">${currentUser.email}</span>
                         </div>
+                        <a href="page2.html" class="dropdown-item">
+                            <i class="fas fa-home"></i> Home
+                        </a>
                         <a href="profile.html" class="dropdown-item">
                             <i class="fas fa-user-circle"></i> My Profile
                         </a>

@@ -3,8 +3,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const authMiddleware = require('../middleware/auth');
+const dbCheck = require('../middleware/dbCheck');
 
 const router = express.Router();
+
+router.use(dbCheck);
 
 const JWT_SECRET =
   process.env.JWT_SECRET || 'super_secret_jwt_key_123_resumespark';
@@ -107,7 +110,7 @@ router.post('/signup', async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: 'Server error during signup.'
+      message: `Server error during signup: ${err.message}`
     });
   }
 });
@@ -196,7 +199,7 @@ router.post('/login', async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: 'Server error during login.'
+      message: `Server error during login: ${err.message}`
     });
   }
 });
