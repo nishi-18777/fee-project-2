@@ -47,4 +47,28 @@ router.get('/load', authMiddleware, async (req, res) => {
   }
 });
 
+// Get all saved resumes for the current user
+router.get('/my-resumes', authMiddleware, async (req, res) => {
+  try {
+    const resumes = await Resume.find({ userId: req.user._id }, 'templateId updatedAt');
+    res.json({ success: true, resumes });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Delete Saved Resume
+router.delete('/delete/:templateId', authMiddleware, async (req, res) => {
+  try {
+    const { templateId } = req.params;
+    const result = await Resume.findOneAndDelete({ userId: req.user._id, templateId });
+    if (!result) {
+      return res.status(404).json({ success: false, message: 'Resume not found.' });
+    }
+    res.json({ success: true, message: 'Resume deleted successfully.' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 module.exports = router;

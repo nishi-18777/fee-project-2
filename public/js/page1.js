@@ -1,4 +1,3 @@
-javascript
 let container = document.getElementById('container');
 
 toggle = () => {
@@ -7,7 +6,14 @@ toggle = () => {
 };
 
 setTimeout(() => {
-	container.classList.add('sign-in');
+	const params = new URLSearchParams(window.location.search);
+	if (params.get('action') === 'signup') {
+		container.classList.remove('sign-in');
+		container.classList.add('sign-up');
+	} else {
+		container.classList.remove('sign-up');
+		container.classList.add('sign-in');
+	}
 }, 200);
 
 // Authentication Client Logic

@@ -1,0 +1,279 @@
+/* Premium Glassmorphic Navigation Bar Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --nav-bg: rgba(10, 10, 14, 0.75);
+    --nav-border: rgba(0, 242, 254, 0.18);
+    --nav-text: #f8fafc;
+    --nav-accent: #00f2fe;
+    --nav-accent-gradient: linear-gradient(90deg, #00b4db, #00f2fe);
+    --dropdown-bg: rgba(13, 13, 17, 0.95);
+    --dropdown-border: rgba(255, 255, 255, 0.08);
+}
+
+.spark-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--nav-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 242, 254, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    z-index: 10000;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+/* Logo */
+.spark-navbar .nav-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.5rem;
+    background: var(--nav-accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    letter-spacing: 1px;
+    transition: transform 0.3s ease;
+}
+
+.spark-navbar .nav-logo:hover {
+    transform: scale(1.02);
+}
+
+.spark-navbar .nav-logo .sparkle {
+    margin-left: 5px;
+    -webkit-text-fill-color: initial;
+    filter: drop-shadow(0 0 5px rgba(0, 242, 254, 0.5));
+}
+
+/* Nav Links */
+.spark-navbar .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.spark-navbar .nav-links a {
+    text-decoration: none;
+    color: var(--nav-text);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 6px 0;
+}
+
+.spark-navbar .nav-links a:hover,
+.spark-navbar .nav-links a.active {
+    color: var(--nav-accent);
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+}
+
+.spark-navbar .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--nav-accent-gradient);
+    transition: width 0.3s ease;
+}
+
+.spark-navbar .nav-links a:hover::after,
+.spark-navbar .nav-links a.active::after {
+    width: 100%;
+}
+
+/* Action Buttons for Guest */
+.spark-navbar .nav-auth-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.spark-navbar .btn-nav-signin {
+    color: var(--nav-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+.spark-navbar .btn-nav-signin:hover {
+    color: var(--nav-accent);
+}
+
+.spark-navbar .btn-nav-signup {
+    background: var(--nav-accent-gradient);
+    color: #0c0c0e !important;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 10px 22px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+    border: none;
+    cursor: pointer;
+}
+
+.spark-navbar .btn-nav-signup:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+}
+
+/* Logged In User Profile Container */
+.spark-navbar .nav-profile-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.spark-navbar .nav-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--nav-accent-gradient);
+    border: 2px solid var(--nav-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #0c0c0e;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+    transition: all 0.3s ease;
+}
+
+.spark-navbar .nav-profile-container:hover .nav-avatar {
+    border-color: var(--nav-accent);
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    transform: scale(1.05);
+}
+
+/* Dropdown Menu */
+.spark-navbar .profile-dropdown {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    width: 250px;
+    background: var(--dropdown-bg);
+    border: 1px solid var(--dropdown-border);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 30px rgba(0, 242, 254, 0.05);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10001;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.spark-navbar .nav-profile-container.active .profile-dropdown {
+    display: flex;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.spark-navbar .dropdown-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.spark-navbar .dropdown-header .user-name {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--nav-text);
+    margin-bottom: 2px;
+    text-transform: capitalize;
+}
+
+.spark-navbar .dropdown-header .user-email {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.spark-navbar .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.spark-navbar .dropdown-item i {
+    font-size: 1rem;
+    color: #94a3b8;
+    width: 16px;
+    text-align: center;
+    transition: color 0.2s ease;
+}
+
+.spark-navbar .dropdown-item:hover {
+    background: rgba(0, 242, 254, 0.08);
+    color: var(--nav-accent);
+    padding-left: 24px;
+}
+
+.spark-navbar .dropdown-item:hover i {
+    color: var(--nav-accent);
+}
+
+.spark-navbar .dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 4px 0;
+}
+
+.spark-navbar .dropdown-item.logout {
+    color: #ef4444;
+}
+
+.spark-navbar .dropdown-item.logout i {
+    color: #f87171;
+}
+
+.spark-navbar .dropdown-item.logout:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+}
+
+.spark-navbar .dropdown-item.logout:hover i {
+    color: #f87171;
+}
+
+/* Custom Responsive Styles */
+@media (max-width: 768px) {
+    .spark-navbar {
+        padding: 0 20px;
+    }
+    .spark-navbar .nav-links {
+        display: none; /* Hide link list on mobile, user can navigate via profile dropdown */
+    }
+}

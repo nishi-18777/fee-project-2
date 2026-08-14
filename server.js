@@ -54,6 +54,7 @@ app.get('/login page.html', (req, res) => {
 });
 
 // Protect all private pages
+app.get('/profile.html', protectPage('profile.html'));
 app.get('/page2.html', protectPage('page2.html'));
 app.get('/templates.html', protectPage('templates.html'));
 app.get('/template1.html', protectPage('template1.html'));

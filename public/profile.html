@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        (function() {
+            const hasCookieToken = document.cookie.split(';').some(c => c.trim().startsWith('token='));
+            const localUser = localStorage.getItem('currentUser');
+            const isStandalone = window.location.protocol === 'file:' || !hasCookieToken;
+            if (isStandalone && !localUser) {
+                window.location.href = 'login page.html';
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - ResumeSpark</title>
+    <link rel="stylesheet" href="css/navbar.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            background: #050508;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 80% 20%, rgba(0, 242, 254, 0.15), transparent 45%),
+                        radial-gradient(circle at 15% 85%, rgba(0, 180, 219, 0.12), transparent 40%),
+                        #050508;
+            z-index: -1;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 110px auto 50px auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 40px;
+        }
+
+        /* Glassmorphic Cards styling */
+        .glass-card {
+            background: rgba(13, 13, 17, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 242, 254, 0.03);
+            padding: 35px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 242, 254, 0.1);
+        }
+
+        /* Profile Left Sidebar */
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            height: fit-content;
+            position: sticky;
+            top: 110px;
+        }
+
+        .profile-avatar-large {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #00b4db, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #050d12;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            border: 3px solid rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+            text-transform: uppercase;
+        }
+
+        .profile-username {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            text-transform: capitalize;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-email {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 30px;
+            word-break: break-all;
+        }
+
+        .profile-stats {
+            width: 100%;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 25px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #00f2fe;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Profile Main Content */
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00f2fe;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            font-size: 1.3rem;
+        }
+
+        /* Resumes Grid Layout */
+        .resumes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .resume-card {
+            background: rgba(20, 20, 28, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .resume-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 254, 0.25);
+            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.08);
+        }
+
+        .resume-thumbnail-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background: #101016;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resume-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .resume-card:hover .resume-thumbnail {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        .resume-card-details {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .resume-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #f8fafc;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .resume-date {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .resume-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            flex-grow: 1;
+            padding: 8px 16px;
+            background: linear-gradient(90deg, #00b4db, #00f2fe);
+            color: #050d12;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            box-shadow: 0 4px 12px rgba(0, 242, 254, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 60px 40px;
+            color: #94a3b8;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #334155;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #f8fafc;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        .btn-create {
+            padding: 12px 28px;
+            background: linear-gradient(90deg, #00b4db, #00f2fe);
+            color: #050d12;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.45);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            .profile-sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="glass-card profile-sidebar">
+            <div class="profile-avatar-large" id="profileAvatarLarge">U</div>
+            <h2 class="profile-username" id="profileUsername">Loading...</h2>
+            <p class="profile-email" id="profileEmail">loading...</p>
+
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="statsResumeCount">0</span>
+                    <span class="stat-label">Saved Resumes</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="glass-card profile-content">
+            <div class="section-header" id="saved-resumes">
+                <h2 class="section-title">
+                    <i class="fas fa-file-alt"></i> My Saved Resumes
+                </h2>
+            </div>
+
+            <!-- Resumes Grid -->
+            <div class="resumes-grid" id="resumesGrid">
+                <!-- Javascript will load resumes here -->
+            </div>
+        </main>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        // Mapping of template IDs to thumbnail images and display names
+        const templateMetadata = {
+            'template1': { name: 'Professional Resume', img: 'assets/pic 1.png' },
+            'template2': { name: 'Structured Resume', img: 'assets/pic 2.png' },
+            'template3': { name: 'Blog Resume', img: 'assets/pic 3.png' },
+            'template4': { name: 'Interactive Resume', img: 'assets/pic 4.png' },
+            'template5': { name: 'Infographic Resume', img: 'assets/PIC 5.png' },
+            'template6': { name: 'Swiss Minimalist Resume', img: 'assets/minimalist_editorial_resume.jpg' },
+            'template7': { name: 'Two-Column Professional', img: 'assets/twocolumn_elegant_a4_resume.jpg' },
+            'template8': { name: 'Classic Navy Bordered', img: 'assets/bordered_creative_a4_resume.jpg' },
+            'template9': { name: 'Creative Pastel Card', img: 'assets/creative_pastel_card_resume.jpg' }
+        };
+
+        // Format Date Helper
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Initialize profile details
+        document.addEventListener('DOMContentLoaded', () => {
+            const localUser = localStorage.getItem('currentUser');
+            if (localUser) {
+                const user = JSON.parse(localUser);
+                document.getElementById('profileUsername').textContent = user.username;
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('profileAvatarLarge').textContent = user.username.charAt(0).toUpperCase();
+            }
+
+            // Load all resumes
+            loadUserResumes();
+        });
+
+        // Load resumes from database
+        async function loadUserResumes() {
+            const resumesGrid = document.getElementById('resumesGrid');
+            resumesGrid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <p>Loading your saved resumes...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/resumes/my-resumes');
+                const data = await response.json();
+
+                if (data.success && data.resumes && data.resumes.length > 0) {
+                    document.getElementById('statsResumeCount').textContent = data.resumes.length;
+                    resumesGrid.innerHTML = ''; // clear grid
+
+                    data.resumes.forEach(resume => {
+                        const meta = templateMetadata[resume.templateId] || { 
+                            name: `Template - ${resume.templateId}`, 
+                            img: 'assets/pic 1.png' 
+                        };
+
+                        const card = document.createElement('div');
+                        card.className = 'resume-card';
+                        card.id = `resume-card-${resume.templateId}`;
+                        card.innerHTML = `
+                            <div class="resume-thumbnail-wrapper">
+                                <img src="${meta.img}" alt="${meta.name}" class="resume-thumbnail" onerror="this.src='assets/pic 1.png'">
+                            </div>
+                            <div class="resume-card-details">
+                                <h3 class="resume-name">${meta.name}</h3>
+                                <p class="resume-date">Last saved: ${formatDate(resume.updatedAt)}</p>
+                                <div class="resume-actions">
+                                    <a href="${resume.templateId}.html" class="btn-edit">
+                                        <i class="fas fa-edit"></i> Edit Resume
+                                    </a>
+                                    <button class="btn-delete" onclick="deleteResume('${resume.templateId}')" title="Delete Saved Resume">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        resumesGrid.appendChild(card);
+                    });
+                } else {
+                    renderEmptyState();
+                }
+            } catch (err) {
+                console.error('Error fetching resumes:', err);
+                renderEmptyState();
+            }
+        }
+
+        function renderEmptyState() {
+            document.getElementById('statsResumeCount').textContent = '0';
+            const resumesGrid = document.getElementById('resumesGrid');
+            resumesGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-folder-open"></i>
+                    <h3>No saved resumes yet</h3>
+                    <p>Select one of our professional templates and start building your resume today.</p>
+                    <a href="templates.html" class="btn-create">Create A Resume</a>
+                </div>
+            `;
+        }
+
+        // Delete Resume function
+        async function deleteResume(templateId) {
+            const meta = templateMetadata[templateId] || { name: templateId };
+            if (!confirm(`Are you sure you want to delete your saved "${meta.name}"?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/resumes/delete/${templateId}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    // Remove card from UI with a nice fadeout transition
+                    const card = document.getElementById(`resume-card-${templateId}`);
+                    if (card) {
+                        card.style.transition = 'all 0.5s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            card.remove();
+                            // Reload check
+                            const count = parseInt(document.getElementById('statsResumeCount').textContent) - 1;
+                            document.getElementById('statsResumeCount').textContent = count;
+                            if (count <= 0) {
+                                renderEmptyState();
+                            }
+                        }, 500);
+                    }
+                } else {
+                    alert(`Failed to delete: ${data.message}`);
+                }
+            } catch (err) {
+                console.error('Error deleting resume:', err);
+                alert('Error deleting resume. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
