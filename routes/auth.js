@@ -1,3 +1,4 @@
+javascript
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -5,31 +6,59 @@ const User = require('../models/User');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_jwt_key_123_resumespark';
 
-// Sign Up
+const JWT_SECRET =
+  process.env.JWT_SECRET || 'super_secret_jwt_key_123_resumespark';
+
+
+// ========================================
+// SIGN UP
+// ========================================
 router.post('/signup', async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
+    // Validate required fields
     if (!username || !email || !password) {
-      return res.status(400).json({ success: false, message: 'Please enter all required fields.' });
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter all required fields.'
+      });
     }
 
+    // Validate password length
     if (password.length < 6) {
-      return res.status(400).json({ success: false, message: 'Password must be at least 6 characters long.' });
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 6 characters long.'
+      });
     }
+
+    const normalizedUsername = username.trim().toLowerCase();
+    const normalizedEmail = email.trim().toLowerCase();
 
     // Check existing email
-    const existingEmail = await User.findOne({ email: email.toLowerCase() });
+    const existingEmail = await User.findOne({
+      email: normalizedEmail
+    });
+
     if (existingEmail) {
-      return res.status(400).json({ success: false, message: 'An account with this email already exists.' });
+      return res.status(400).json({
+        success: false,
+        message: 'An account with this email already exists.'
+      });
     }
 
     // Check existing username
-    const existingUsername = await User.findOne({ username: username.toLowerCase() });
+    const existingUsername = await User.findOne({
+      username: normalizedUsername
+    });
+
     if (existingUsername) {
-      return res.status(400).json({ success: false, message: 'This username is already taken.' });
+      return res.status(400).json({
+        success: false,
+        message: 'This username is already taken.'
+      });
     }
 
     // Hash password
@@ -38,25 +67,34 @@ router.post('/signup', async (req, res) => {
 
     // Create user
     const newUser = new User({
-      username,
-      email,
+      username: normalizedUsername,
+      email: normalizedEmail,
       password: passwordHash
     });
 
     const savedUser = await newUser.save();
 
-    // Sign JWT
-    const token = jwt.sign({ id: savedUser._id }, JWT_SECRET, { expiresIn: '1d' });
+    // Create JWT
+    const token = jwt.sign(
+      {
+        id: savedUser._id
+      },
+      JWT_SECRET,
+      {
+        expiresIn: '1d'
+      }
+    );
 
-    // Set cookie
+    // Set authentication cookie
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === 'production',
+      path: '/'
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       user: {
         id: savedUser._id,
@@ -66,48 +104,86 @@ router.post('/signup', async (req, res) => {
     });
 
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error('Signup error:', err);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error during signup.'
+    });
   }
 });
 
-// Login
+
+// ========================================
+// LOGIN
+// ========================================
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    // Validate fields
     if (!username || !password) {
-      return res.status(400).json({ success: false, message: 'Please enter all required fields.' });
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter all required fields.'
+      });
     }
 
-    // Find user by username or email
+    const loginValue = username.trim().toLowerCase();
+
+    // Find user by username OR email
     const user = await User.findOne({
       $or: [
-        { username: username.toLowerCase() },
-        { email: username.toLowerCase() }
+        {
+          username: loginValue
+        },
+        {
+          email: loginValue
+        }
       ]
     });
 
     if (!user) {
-      return res.status(400).json({ success: false, message: 'No account with this username/email exists.' });
+      return res.status(400).json({
+        success: false,
+        message: 'No account with this username/email exists.'
+      });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    // Check password
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
+
     if (!isMatch) {
-      return res.status(400).json({ success: false, message: 'Invalid credentials.' });
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid credentials.'
+      });
     }
 
-    // Sign JWT
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1d' });
+    // Create JWT
+    const token = jwt.sign(
+      {
+        id: user._id
+      },
+      JWT_SECRET,
+      {
+        expiresIn: '1d'
+      }
+    );
 
-    // Set cookie
+    // Set authentication cookie
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === 'production',
+      path: '/'
     });
 
-    res.json({
+    return res.status(200).json({
       success: true,
       user: {
         id: user._id,
@@ -117,19 +193,40 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error('Login error:', err);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error during login.'
+    });
   }
 });
 
-// Logout
+
+// ========================================
+// LOGOUT
+// ========================================
 router.post('/logout', (req, res) => {
-  res.cookie('token', '', { httpOnly: true, expires: new Date(0) });
-  res.json({ success: true, message: 'Logged out successfully.' });
+  res.cookie('token', '', {
+    httpOnly: true,
+    expires: new Date(0),
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/'
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: 'Logged out successfully.'
+  });
 });
 
-// Get Current User Profile
+
+// ========================================
+// GET CURRENT USER
+// ========================================
 router.get('/me', authMiddleware, (req, res) => {
-  res.json({
+  return res.status(200).json({
     success: true,
     user: {
       id: req.user._id,
@@ -139,4 +236,6 @@ router.get('/me', authMiddleware, (req, res) => {
   });
 });
 
+
 module.exports = router;
+

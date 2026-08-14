@@ -1,3 +1,4 @@
+javascript
 let container = document.getElementById('container');
 
 toggle = () => {
@@ -14,10 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	const signupBtn = document.getElementById('signup-btn');
 	const signinBtn = document.getElementById('signin-btn');
 
+	// =========================
+	// SIGN UP
+	// =========================
 	if (signupBtn) {
 		signupBtn.addEventListener('click', async (e) => {
 			e.preventDefault();
-			
+
 			const username = document.getElementById('signup-username').value.trim();
 			const email = document.getElementById('signup-email').value.trim();
 			const password = document.getElementById('signup-password').value;
@@ -39,52 +43,59 @@ document.addEventListener('DOMContentLoaded', () => {
 			try {
 				const response = await fetch('/api/auth/signup', {
 					method: 'POST',
+					credentials: 'include',
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ username, email, password })
+					body: JSON.stringify({
+						username,
+						email,
+						password
+					})
 				});
 
 				const data = await response.json();
+
 				if (data.success) {
-					localStorage.setItem('currentUser', JSON.stringify({ username: data.user.username, email: data.user.email }));
-					window.location.href = 'page2.html';
+					localStorage.setItem(
+						'currentUser',
+						JSON.stringify({
+							username: data.user.username,
+							email: data.user.email
+						})
+					);
+
+					window.location.href = '/page2.html';
 				} else {
-					errorDiv.textContent = data.message || 'Registration failed.';
+					errorDiv.textContent =
+						data.message || 'Registration failed.';
 				}
+
 			} catch (err) {
-				console.warn('Signup server error, falling back to LocalStorage:', err);
-				
-				// LocalStorage Fallback
-				try {
-					const users = JSON.parse(localStorage.getItem('users') || '[]');
-					const existingUser = users.find(u => u.username.toLowerCase() === username.toLowerCase() || u.email.toLowerCase() === email.toLowerCase());
-					
-					if (existingUser) {
-						errorDiv.textContent = 'Username or email already exists (Local Mode).';
-						return;
-					}
-					
-					users.push({ username, email, password });
-					localStorage.setItem('users', JSON.stringify(users));
-					localStorage.setItem('currentUser', JSON.stringify({ username, email }));
-					
-					window.location.href = 'page2.html';
-				} catch (lsErr) {
-					console.error('LocalStorage error:', lsErr);
-					errorDiv.textContent = 'Network error. Local storage is also unavailable.';
-				}
+				console.error('Signup error:', err);
+				errorDiv.textContent =
+					'Unable to connect to the server. Please try again.';
 			}
 		});
 	}
 
+	// =========================
+	// SIGN IN
+	// =========================
 	if (signinBtn) {
 		signinBtn.addEventListener('click', async (e) => {
 			e.preventDefault();
 
-			const username = document.getElementById('signin-username').value.trim();
-			const password = document.getElementById('signin-password').value;
-			const errorDiv = document.getElementById('signin-error');
+			const username = document
+				.getElementById('signin-username')
+				.value
+				.trim();
+
+			const password =
+				document.getElementById('signin-password').value;
+
+			const errorDiv =
+				document.getElementById('signin-error');
 
 			errorDiv.textContent = '';
 
@@ -96,41 +107,39 @@ document.addEventListener('DOMContentLoaded', () => {
 			try {
 				const response = await fetch('/api/auth/login', {
 					method: 'POST',
+					credentials: 'include',
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ username, password })
+					body: JSON.stringify({
+						username,
+						password
+					})
 				});
 
 				const data = await response.json();
+
 				if (data.success) {
-					localStorage.setItem('currentUser', JSON.stringify({ username: data.user.username, email: data.user.email }));
-					window.location.href = 'page2.html';
-				} else {
-					errorDiv.textContent = data.message || 'Invalid username or password.';
-				}
-			} catch (err) {
-				console.warn('Signin server error, falling back to LocalStorage:', err);
-				
-				// LocalStorage Fallback
-				try {
-					const users = JSON.parse(localStorage.getItem('users') || '[]');
-					const matchedUser = users.find(u => 
-						(u.username.toLowerCase() === username.toLowerCase() || u.email.toLowerCase() === username.toLowerCase()) && 
-						u.password === password
+					localStorage.setItem(
+						'currentUser',
+						JSON.stringify({
+							username: data.user.username,
+							email: data.user.email
+						})
 					);
-					
-					if (matchedUser) {
-						localStorage.setItem('currentUser', JSON.stringify({ username: matchedUser.username, email: matchedUser.email }));
-						window.location.href = 'page2.html';
-					} else {
-						errorDiv.textContent = 'Invalid username or password (Local Mode).';
-					}
-				} catch (lsErr) {
-					console.error('LocalStorage error:', lsErr);
-					errorDiv.textContent = 'Network error. Local storage is also unavailable.';
+
+					window.location.href = '/page2.html';
+				} else {
+					errorDiv.textContent =
+						data.message || 'Invalid username or password.';
 				}
+
+			} catch (err) {
+				console.error('Signin error:', err);
+				errorDiv.textContent =
+					'Unable to connect to the server. Please try again.';
 			}
 		});
 	}
 });
+
