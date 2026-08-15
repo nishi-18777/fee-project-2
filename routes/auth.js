@@ -7,7 +7,7 @@ const dbCheck = require('../middleware/dbCheck');
 
 const router = express.Router();
 
-// router.use(dbCheck);
+router.use(dbCheck);
 
 const JWT_SECRET =
   process.env.JWT_SECRET || 'super_secret_jwt_key_123_resumespark';
