@@ -124,7 +124,19 @@
                 <p>CREATIVE PASTEL CARD RESUME.</p>
                 <a href="template9.html">Template 9</a>
             </div>
+        </div>
     </div>
+    <script>
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', (e) => {
+                const link = card.querySelector('.card-content a');
+                if (link && e.target !== link) {
+                    link.click();
+                }
+            });
+        });
+    </script>
     <script src="js/navbar.js"></script>
 </body>
 </html>
