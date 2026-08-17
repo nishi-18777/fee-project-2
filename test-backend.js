@@ -4,7 +4,7 @@ const User = require('./models/User');
 const Resume = require('./models/Resume');
 const bcrypt = require('bcryptjs');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/resumespark';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/resumespark';
 
 async function runTests() {
   console.log('--- STARTING BACKEND AUTOMATED TESTS ---');
