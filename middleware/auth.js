@@ -16,6 +16,16 @@ const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'Token verification failed, authorization denied.' });
     }
 
+    if (verified.isGuest) {
+      req.user = {
+        _id: 'guest_user',
+        username: verified.username || 'Guest User',
+        email: verified.email || 'guest@resumespark.com',
+        isGuest: true
+      };
+      return next();
+    }
+
     const user = await User.findById(verified.id).select('-password');
     if (!user) {
       return res.status(401).json({ success: false, message: 'User not found, authorization denied.' });

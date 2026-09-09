@@ -148,6 +148,53 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	// =========================
+	// GUEST / DEMO LOGIN
+	// =========================
+	const handleGuestLogin = async (e) => {
+		if (e) e.preventDefault();
+		try {
+			const res = await fetch('/api/auth/guest', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' }
+			});
+			const data = await res.json();
+			if (data.success) {
+				localStorage.setItem(
+					'currentUser',
+					JSON.stringify({
+						username: data.user.username || 'Guest User',
+						email: data.user.email || 'guest@resumespark.com'
+					})
+				);
+				window.location.href = '/page2.html';
+				return;
+			}
+		} catch (err) {
+			console.error('Guest login network issue, using offline guest session:', err);
+		}
+
+		// Fallback if network or serverless route has any issue
+		localStorage.setItem(
+			'currentUser',
+			JSON.stringify({
+				username: 'Guest User',
+				email: 'guest@resumespark.com'
+			})
+		);
+		window.location.href = '/page2.html';
+	};
+
+	const signinGuestBtn = document.getElementById('signin-guest-btn');
+	if (signinGuestBtn) {
+		signinGuestBtn.addEventListener('click', handleGuestLogin);
+	}
+
+	const signupGuestBtn = document.getElementById('signup-guest-btn');
+	if (signupGuestBtn) {
+		signupGuestBtn.addEventListener('click', handleGuestLogin);
+	}
+
 	// ========================================
 	// GOOGLE SIGN-IN INTEGRATION
 	// ========================================

@@ -7,11 +7,72 @@ const dbCheck = require('../middleware/dbCheck');
 
 const router = express.Router();
 
-router.use(dbCheck);
-
 const JWT_SECRET =
   process.env.JWT_SECRET || 'super_secret_jwt_key_123_resumespark';
 
+// ========================================
+// 1. PUBLIC ROUTES (DO NOT REQUIRE DB)
+// ========================================
+
+// GET GOOGLE CLIENT ID
+router.get('/google/client-id', (req, res) => {
+  res.json({ clientId: process.env.GOOGLE_CLIENT_ID || '' });
+});
+
+// GUEST LOGIN (Works instantly without Database)
+router.post('/guest', (req, res) => {
+  const token = jwt.sign(
+    {
+      id: 'guest_user',
+      username: 'Guest User',
+      email: 'guest@resumespark.com',
+      isGuest: true
+    },
+    JWT_SECRET,
+    {
+      expiresIn: '1d'
+    }
+  );
+
+  res.cookie('token', token, {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/'
+  });
+
+  return res.status(200).json({
+    success: true,
+    user: {
+      id: 'guest_user',
+      username: 'Guest User',
+      email: 'guest@resumespark.com',
+      isGuest: true
+    }
+  });
+});
+
+// LOGOUT
+router.post('/logout', (req, res) => {
+  res.cookie('token', '', {
+    httpOnly: true,
+    expires: new Date(0),
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/'
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: 'Logged out successfully.'
+  });
+});
+
+// ========================================
+// 2. DATABASE CHECK FOR DB-DEPENDENT ROUTES
+// ========================================
+router.use(dbCheck);
 
 // ========================================
 // SIGN UP
@@ -206,25 +267,6 @@ router.post('/login', async (req, res) => {
 
 
 // ========================================
-// LOGOUT
-// ========================================
-router.post('/logout', (req, res) => {
-  res.cookie('token', '', {
-    httpOnly: true,
-    expires: new Date(0),
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-    path: '/'
-  });
-
-  return res.status(200).json({
-    success: true,
-    message: 'Logged out successfully.'
-  });
-});
-
-
-// ========================================
 // GET CURRENT USER
 // ========================================
 router.get('/me', authMiddleware, (req, res) => {
@@ -233,18 +275,12 @@ router.get('/me', authMiddleware, (req, res) => {
     user: {
       id: req.user._id,
       username: req.user.username,
-      email: req.user.email
+      email: req.user.email,
+      isGuest: req.user.isGuest || false
     }
   });
 });
 
-
-// ========================================
-// GET GOOGLE CLIENT ID
-// ========================================
-router.get('/google/client-id', (req, res) => {
-  res.json({ clientId: process.env.GOOGLE_CLIENT_ID || '' });
-});
 
 
 // ========================================
