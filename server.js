@@ -13,10 +13,6 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-const MONGODB_URI =
-  process.env.MONGODB_URI ||
-  'mongodb://127.0.0.1:27017/resumespark';
-
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   'super_secret_jwt_key_123_resumespark';
@@ -25,19 +21,11 @@ const JWT_SECRET =
 // DATABASE CONNECTION
 // ===============================
 
-const connectDB = () => {
-  mongoose
-    .connect(MONGODB_URI)
-    .then(() => {
-      console.log('Connected to MongoDB database successfully.');
-    })
-    .catch((err) => {
-      console.error('MongoDB database connection error, retrying in 5 seconds:', err);
-      setTimeout(connectDB, 5000);
-    });
-};
+const connectDB = require('./lib/db');
 
-connectDB();
+connectDB().catch((err) => {
+  console.error('Initial MongoDB connection attempt error:', err.message);
+});
 
 // ===============================
 // MIDDLEWARE
