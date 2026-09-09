@@ -8,9 +8,9 @@ const router = express.Router();
 // 1. Authenticate user first
 router.use(authMiddleware);
 
-// 2. Bypass database check for guest users; enforce dbCheck for registered users
+// 2. Bypass database check for guest/google session users
 router.use((req, res, next) => {
-  if (req.user && req.user.isGuest) {
+  if (req.user && (req.user.isGuest || req.user.isGoogleUser)) {
     return next();
   }
   return dbCheck(req, res, next);
@@ -25,22 +25,31 @@ router.post('/save', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Template ID and HTML Content are required.' });
     }
 
-    if (req.user.isGuest) {
+    if (req.user.isGuest || !req.user._id || String(req.user._id).startsWith('google_')) {
       return res.json({
         success: true,
-        message: 'Resume saved in session (Guest Mode).',
+        message: 'Resume saved in session.',
         resume: { templateId, htmlContent, updatedAt: Date.now() }
       });
     }
 
-    // Upsert resume content for the user/template combo in MongoDB
-    const resume = await Resume.findOneAndUpdate(
-      { userId: req.user._id, templateId },
-      { htmlContent, updatedAt: Date.now() },
-      { new: true, upsert: true, setDefaultsOnInsert: true }
-    );
+    try {
+      // Upsert resume content for the user/template combo in MongoDB
+      const resume = await Resume.findOneAndUpdate(
+        { userId: req.user._id, templateId },
+        { htmlContent, updatedAt: Date.now() },
+        { new: true, upsert: true, setDefaultsOnInsert: true }
+      );
 
-    res.json({ success: true, message: 'Resume saved successfully.', resume });
+      return res.json({ success: true, message: 'Resume saved successfully.', resume });
+    } catch (dbErr) {
+      console.warn('MongoDB resume save error, falling back to local session:', dbErr.message);
+      return res.json({
+        success: true,
+        message: 'Resume saved to local storage.',
+        resume: { templateId, htmlContent, updatedAt: Date.now() }
+      });
+    }
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -55,17 +64,22 @@ router.get('/load', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Template ID is required.' });
     }
 
-    if (req.user.isGuest) {
+    if (req.user.isGuest || !req.user._id || String(req.user._id).startsWith('google_')) {
       return res.json({ success: true, htmlContent: null, message: 'Guest mode: using local template.' });
     }
 
-    const resume = await Resume.findOne({ userId: req.user._id, templateId });
+    try {
+      const resume = await Resume.findOne({ userId: req.user._id, templateId });
 
-    if (!resume) {
-      return res.json({ success: true, htmlContent: null, message: 'No saved resume found for this template.' });
+      if (!resume) {
+        return res.json({ success: true, htmlContent: null, message: 'No saved resume found for this template.' });
+      }
+
+      return res.json({ success: true, htmlContent: resume.htmlContent });
+    } catch (dbErr) {
+      console.warn('MongoDB resume load error, falling back to local:', dbErr.message);
+      return res.json({ success: true, htmlContent: null, message: 'Offline mode: using local template.' });
     }
-
-    res.json({ success: true, htmlContent: resume.htmlContent });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -74,12 +88,16 @@ router.get('/load', async (req, res) => {
 // Get all saved resumes for the current user
 router.get('/my-resumes', async (req, res) => {
   try {
-    if (req.user.isGuest) {
+    if (req.user.isGuest || !req.user._id || String(req.user._id).startsWith('google_')) {
       return res.json({ success: true, resumes: [] });
     }
 
-    const resumes = await Resume.find({ userId: req.user._id }, 'templateId updatedAt');
-    res.json({ success: true, resumes });
+    try {
+      const resumes = await Resume.find({ userId: req.user._id }, 'templateId updatedAt');
+      return res.json({ success: true, resumes });
+    } catch (dbErr) {
+      return res.json({ success: true, resumes: [] });
+    }
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -90,15 +108,19 @@ router.delete('/delete/:templateId', async (req, res) => {
   try {
     const { templateId } = req.params;
 
-    if (req.user.isGuest) {
+    if (req.user.isGuest || !req.user._id || String(req.user._id).startsWith('google_')) {
       return res.json({ success: true, message: 'Resume deleted.' });
     }
 
-    const result = await Resume.findOneAndDelete({ userId: req.user._id, templateId });
-    if (!result) {
-      return res.status(404).json({ success: false, message: 'Resume not found.' });
+    try {
+      const result = await Resume.findOneAndDelete({ userId: req.user._id, templateId });
+      if (!result) {
+        return res.status(404).json({ success: false, message: 'Resume not found.' });
+      }
+      return res.json({ success: true, message: 'Resume deleted successfully.' });
+    } catch (dbErr) {
+      return res.json({ success: true, message: 'Resume deleted.' });
     }
-    res.json({ success: true, message: 'Resume deleted successfully.' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

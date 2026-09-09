@@ -70,6 +70,119 @@ router.post('/logout', (req, res) => {
 });
 
 // ========================================
+// GOOGLE SIGN IN (Resilient & never blocks)
+// ========================================
+router.post('/google', async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: 'Google ID token is required.' });
+    }
+
+    // Verify token using Google tokeninfo API
+    const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
+    if (!response.ok) {
+      return res.status(400).json({ success: false, message: 'Invalid Google token.' });
+    }
+
+    const payload = await response.json();
+    
+    // Verify audience (client ID) matches if GOOGLE_CLIENT_ID is set
+    const expectedClientId = process.env.GOOGLE_CLIENT_ID;
+    if (expectedClientId && 
+        expectedClientId !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com' && 
+        payload.aud !== expectedClientId) {
+      return res.status(400).json({ success: false, message: 'Token audience mismatch.' });
+    }
+
+    const { email, name, email_verified } = payload;
+    if (!email_verified) {
+      return res.status(400).json({ success: false, message: 'Google email is not verified.' });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    let userId = null;
+    let finalUsername = name || normalizedEmail.split('@')[0];
+
+    // Attempt MongoDB persistence if database is available
+    try {
+      let user = await User.findOne({ email: normalizedEmail });
+
+      if (!user) {
+        let baseUsername = normalizedEmail.split('@')[0].replace(/[^a-z0-9]/g, '');
+        if (baseUsername.length < 3) {
+          baseUsername = 'user' + Math.floor(Math.random() * 1000);
+        }
+
+        let username = baseUsername;
+        let userExists = await User.findOne({ username });
+        let counter = 1;
+        while (userExists) {
+          username = `${baseUsername}${counter}`;
+          userExists = await User.findOne({ username });
+          counter++;
+        }
+
+        const crypto = require('crypto');
+        const randomPassword = crypto.randomBytes(16).toString('hex');
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(randomPassword, salt);
+
+        user = new User({
+          username,
+          email: normalizedEmail,
+          password: passwordHash
+        });
+
+        await user.save();
+      }
+
+      userId = user._id;
+      finalUsername = user.username;
+    } catch (dbErr) {
+      console.warn('Google Auth: Database unavailable, generating verified Google session:', dbErr.message);
+      userId = 'google_' + normalizedEmail;
+    }
+
+    // Create JWT
+    const localToken = jwt.sign(
+      {
+        id: userId,
+        username: finalUsername,
+        email: normalizedEmail,
+        isGoogleUser: true
+      },
+      JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.cookie('token', localToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/'
+    });
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: userId,
+        username: finalUsername,
+        email: normalizedEmail
+      }
+    });
+
+  } catch (err) {
+    console.error('Google Auth Error:', err);
+    return res.status(500).json({
+      success: false,
+      message: `Server error during Google login: ${err.message}`
+    });
+  }
+});
+
+// ========================================
 // 2. DATABASE CHECK FOR DB-DEPENDENT ROUTES
 // ========================================
 router.use(dbCheck);
@@ -281,111 +394,6 @@ router.get('/me', authMiddleware, (req, res) => {
   });
 });
 
-
-
-// ========================================
-// GOOGLE SIGN IN
-// ========================================
-router.post('/google', async (req, res) => {
-  try {
-    const { token } = req.body;
-    if (!token) {
-      return res.status(400).json({ success: false, message: 'Google ID token is required.' });
-    }
-
-    // Verify token using Google tokeninfo API
-    const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
-    if (!response.ok) {
-      return res.status(400).json({ success: false, message: 'Invalid Google token.' });
-    }
-
-    const payload = await response.json();
-    
-    // Verify audience (client ID) matches if GOOGLE_CLIENT_ID is set
-    const expectedClientId = process.env.GOOGLE_CLIENT_ID;
-    if (expectedClientId && 
-        expectedClientId !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com' && 
-        payload.aud !== expectedClientId) {
-      return res.status(400).json({ success: false, message: 'Token audience mismatch.' });
-    }
-
-    const { email, name, email_verified } = payload;
-    if (!email_verified) {
-      return res.status(400).json({ success: false, message: 'Google email is not verified.' });
-    }
-
-    const normalizedEmail = email.trim().toLowerCase();
-
-    // Find user by email
-    let user = await User.findOne({ email: normalizedEmail });
-
-    if (!user) {
-      // Create a username from email
-      let baseUsername = normalizedEmail.split('@')[0];
-      // Normalize baseUsername to fit user validation schema: min 3 chars, lowercase, letters/numbers
-      baseUsername = baseUsername.replace(/[^a-z0-9]/g, '');
-      if (baseUsername.length < 3) {
-        baseUsername = 'user' + Math.floor(Math.random() * 1000);
-      }
-
-      // Ensure uniqueness of username
-      let username = baseUsername;
-      let userExists = await User.findOne({ username });
-      let counter = 1;
-      while (userExists) {
-        username = `${baseUsername}${counter}`;
-        userExists = await User.findOne({ username });
-        counter++;
-      }
-
-      // Generate a secure random password for validation
-      const crypto = require('crypto');
-      const randomPassword = crypto.randomBytes(16).toString('hex');
-      const salt = await bcrypt.genSalt(10);
-      const passwordHash = await bcrypt.hash(randomPassword, salt);
-
-      user = new User({
-        username,
-        email: normalizedEmail,
-        password: passwordHash
-      });
-
-      await user.save();
-    }
-
-    // Create JWT
-    const localToken = jwt.sign(
-      { id: user._id },
-      JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-
-    // Set cookie
-    res.cookie('token', localToken, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/'
-    });
-
-    return res.status(200).json({
-      success: true,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email
-      }
-    });
-
-  } catch (err) {
-    console.error('Google Auth Error:', err);
-    return res.status(500).json({
-      success: false,
-      message: `Server error during Google login: ${err.message}`
-    });
-  }
-});
 
 
 module.exports = router;

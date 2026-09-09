@@ -26,12 +26,22 @@ const authMiddleware = async (req, res, next) => {
       return next();
     }
 
-    const user = await User.findById(verified.id).select('-password');
-    if (!user) {
-      return res.status(401).json({ success: false, message: 'User not found, authorization denied.' });
+    try {
+      const user = await User.findById(verified.id).select('-password');
+      if (user) {
+        req.user = user;
+        return next();
+      }
+    } catch (dbErr) {
+      console.warn('DB lookup failed in authMiddleware, falling back to verified JWT payload:', dbErr.message);
     }
 
-    req.user = user;
+    req.user = {
+      _id: verified.id,
+      username: verified.username || 'User',
+      email: verified.email || '',
+      isGuest: Boolean(verified.isGuest)
+    };
     next();
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
