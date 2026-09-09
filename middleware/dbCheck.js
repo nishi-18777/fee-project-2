@@ -18,8 +18,8 @@ const dbCheckMiddleware = async (req, res, next) => {
     return res.status(503).json({
       success: false,
       message: isCloud
-        ? 'Database connection failed. Please ensure MONGODB_URI is configured with a valid MongoDB Atlas connection string in your deployment settings.'
-        : 'Database is not connected. Please make sure MongoDB is running on your machine.'
+        ? `Database connection failed: ${err.message}`
+        : `Database is not connected: ${err.message}`
     });
   }
 };
