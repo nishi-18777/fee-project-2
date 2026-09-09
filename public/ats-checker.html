@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        (function() {
+            const hasCookieToken = document.cookie.split(';').some(c => c.trim().startsWith('token='));
+            const localUser = localStorage.getItem('currentUser');
+            const isStandalone = window.location.protocol === 'file:' || !hasCookieToken;
+            if (isStandalone && !localUser) {
+                window.location.href = 'login page.html';
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS Resume Score & Interview Checker - ResumeSpark</title>
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/ats-checker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- PDF.js library for fast client-side PDF parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- Mammoth.js for Word DOCX extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+</head>
+<body>
+    <div class="ats-background"></div>
+
+    <div class="ats-container">
+        <!-- Title & Subtitle -->
+        <div class="ats-header">
+            <h1 class="ats-title">Resume ATS Score & <span>Interview Checker</span></h1>
+            <p class="ats-subtitle">Scan your resume against real recruiter algorithms to see if you are ready for interviews</p>
+        </div>
+
+        <!-- Upload & Input Card -->
+        <div class="upload-card">
+            <div class="upload-tabs">
+                <button class="upload-tab active" id="tabUpload">
+                    <i class="fas fa-file-upload"></i> Upload File (PDF / DOCX)
+                </button>
+                <button class="upload-tab" id="tabPaste">
+                    <i class="fas fa-paste"></i> Paste Resume Text
+                </button>
+            </div>
+
+            <!-- Drag & Drop Zone -->
+            <div class="dropzone" id="dropzone">
+                <i class="fas fa-cloud-upload-alt dropzone-icon"></i>
+                <div class="dropzone-text">Drag & drop your resume here, or browse files</div>
+                <div class="dropzone-subtext">Supports PDF, Word (.docx), and Plain Text (.txt) up to 10MB</div>
+                <input type="file" id="fileInput" class="file-input" accept=".pdf,.docx,.txt">
+            </div>
+
+            <!-- Paste Text Zone -->
+            <div class="paste-zone" id="pasteZone">
+                <textarea id="pasteInput" class="paste-textarea" placeholder="Paste your resume content here (Summary, Work Experience, Education, Technical Skills, Projects)..."></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="upload-actions">
+                <button type="button" class="btn-sample" id="btnSample">
+                    <i class="fas fa-magic"></i> Try with Sample Resume
+                </button>
+                <button type="button" class="btn-analyze" id="btnAnalyze" disabled>
+                    <i class="fas fa-search-dollar"></i> Calculate ATS Score
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <h3>Analyzing ATS Compatibility...</h3>
+            <p style="color: var(--text-muted); margin-top: 5px;">Evaluating keyword density, action verbs, section tagging, and quantifiable metrics</p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <!-- Hero Score & Verdict Card -->
+            <div class="score-hero-card">
+                <div class="score-radial-wrapper">
+                    <svg class="score-svg" viewBox="0 0 200 200">
+                        <circle class="score-bg-circle" cx="100" cy="100" r="80"></circle>
+                        <circle class="score-progress-circle" id="progressCircle" cx="100" cy="100" r="80"></circle>
+                    </svg>
+                    <div class="score-number-display">
+                        <div class="score-number" id="scoreNumber">0</div>
+                        <div class="score-total">/ 100 ATS</div>
+                    </div>
+                </div>
+
+                <div class="verdict-info">
+                    <div class="verdict-badge ready" id="verdictBadge">🟢 Interview Ready</div>
+                    <h2 class="verdict-headline" id="verdictHeadline">Outstanding! Highly Optimized for ATS Systems</h2>
+                    <p class="verdict-description" id="verdictDescription">Your resume contains robust keyword density, recognizable section headers, and impactful phrasing.</p>
+                </div>
+            </div>
+
+            <!-- Category Breakdown Grid -->
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-header">
+                        <span><i class="fas fa-id-card"></i> Contact Info</span>
+                        <span class="category-score" id="catContactScore">0/15</span>
+                    </div>
+                    <div class="category-bar-bg">
+                        <div class="category-bar-fill" id="catContactBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">
+                        <span><i class="fas fa-list-alt"></i> Essential Sections</span>
+                        <span class="category-score" id="catSectionsScore">0/25</span>
+                    </div>
+                    <div class="category-bar-bg">
+                        <div class="category-bar-fill" id="catSectionsBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">
+                        <span><i class="fas fa-bolt"></i> Action Verbs</span>
+                        <span class="category-score" id="catVerbsScore">0/20</span>
+                    </div>
+                    <div class="category-bar-bg">
+                        <div class="category-bar-fill" id="catVerbsBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">
+                        <span><i class="fas fa-chart-line"></i> Metrics & Impact</span>
+                        <span class="category-score" id="catMetricsScore">0/20</span>
+                    </div>
+                    <div class="category-bar-bg">
+                        <div class="category-bar-fill" id="catMetricsBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">
+                        <span><i class="fas fa-align-left"></i> Length & Format</span>
+                        <span class="category-score" id="catFormattingScore">0/20</span>
+                    </div>
+                    <div class="category-bar-bg">
+                        <div class="category-bar-fill" id="catFormattingBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fixes & Recommendations -->
+            <div class="fixes-section">
+                <div class="fixes-header">
+                    <i class="fas fa-tools"></i>
+                    <span>Diagnosed Issues & Recommended Fixes</span>
+                </div>
+
+                <div id="issuesList">
+                    <!-- Dynamic issues inserted by JS -->
+                </div>
+
+                <!-- Suggested Rewrites / High Impact Examples -->
+                <div class="rewrite-box">
+                    <div class="rewrite-title">
+                        <i class="fas fa-lightbulb"></i> Formula for High-Scoring ATS Bullet Points:
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.95rem;">
+                        Recruiter ATS systems look for the <strong>Google X-Y-Z Formula</strong>: <em>"Accomplished [X] as measured by [Y], by doing [Z]"</em>
+                    </p>
+
+                    <div class="rewrite-comparison">
+                        <div class="rewrite-before">
+                            <span class="rewrite-label">❌ Weak / Low ATS Score</span>
+                            Worked on the backend APIs and helped build database tables for the web app.
+                        </div>
+                        <div class="rewrite-after">
+                            <span class="rewrite-label">✅ Strong / High ATS Score</span>
+                            Architected and deployed 12+ RESTful microservices using Node.js & MongoDB, slashing API latency by 38%.
+                        </div>
+                    </div>
+
+                    <div class="rewrite-comparison">
+                        <div class="rewrite-before">
+                            <span class="rewrite-label">❌ Weak / Low ATS Score</span>
+                            Responsible for making the user interface responsive and fixing frontend bugs.
+                        </div>
+                        <div class="rewrite-after">
+                            <span class="rewrite-label">✅ Strong / High ATS Score</span>
+                            Engineered 10+ responsive React components, improving mobile page load speeds by 45% for 30,000+ monthly users.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA to build with templates -->
+                <div class="rebuild-cta">
+                    <h3>Want an automatic 95+ ATS Score?</h3>
+                    <p>All Resume Spark templates are pre-engineered to pass enterprise Applicant Tracking Systems with clean section parsing.</p>
+                    <a href="templates.html" class="btn-cta-template">
+                        <i class="fas fa-layer-group"></i> Pick an ATS-Optimized Template
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script src="js/ats-checker.js"></script>
+</body>
+</html>

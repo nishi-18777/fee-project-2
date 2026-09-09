@@ -112,6 +112,11 @@ app.get(
 );
 
 app.get(
+  '/ats-checker.html',
+  protectPage('ats-checker.html')
+);
+
+app.get(
   '/template1.html',
   protectPage('template1.html')
 );

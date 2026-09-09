@@ -32,6 +32,7 @@
         const isProfileActive = currentPage === 'profile.html' ? 'active' : '';
         const isTemplatesActive = currentPage === 'templates.html' ? 'active' : '';
         const isHomeActive = currentPage === 'page2.html' ? 'active' : '';
+        const isAtsActive = currentPage === 'ats-checker.html' ? 'active' : '';
 
         // Left Logo Section
         const logoLink = currentUser ? 'page2.html' : 'login page.html';
@@ -44,6 +45,7 @@
                 <ul class="nav-links">
                     <li><a href="page2.html" class="${isHomeActive}">Home</a></li>
                     <li><a href="templates.html" class="${isTemplatesActive}">Templates</a></li>
+                    <li><a href="ats-checker.html" class="${isAtsActive}">ATS Checker</a></li>
                     <li><a href="profile.html" class="${isProfileActive}">My Profile</a></li>
                     <li><a href="profile.html#saved-resumes" class="${currentPage === 'profile.html' && window.location.hash === '#saved-resumes' ? 'active' : ''}">Saved Resumes</a></li>
                 </ul>
@@ -64,6 +66,9 @@
                         </div>
                         <a href="page2.html" class="dropdown-item">
                             <i class="fas fa-home"></i> Home
+                        </a>
+                        <a href="ats-checker.html" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i> ATS Checker
                         </a>
                         <a href="profile.html" class="dropdown-item">
                             <i class="fas fa-user-circle"></i> My Profile
