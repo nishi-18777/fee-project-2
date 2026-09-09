@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <script>
@@ -93,14 +93,34 @@
                     <div class="verdict-badge ready" id="verdictBadge">🟢 Interview Ready</div>
                     <h2 class="verdict-headline" id="verdictHeadline">Outstanding! Highly Optimized for ATS Systems</h2>
                     <p class="verdict-description" id="verdictDescription">Your resume contains robust keyword density, recognizable section headers, and impactful phrasing.</p>
+
+                    <!-- Student Placement & Probability Metrics Banner -->
+                    <div class="stats-banner">
+                        <div class="stat-box">
+                            <div class="stat-label">Interview Call Probability</div>
+                            <div class="stat-value highlight-green" id="statProbability">95%+</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Applicant Percentile</div>
+                            <div class="stat-value highlight-cyan" id="statPercentile">Top 4%</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Recruiter Screening Verdict</div>
+                            <div class="stat-value" id="statVerdict">Guaranteed Pass</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Word Count (1-Page Target)</div>
+                            <div class="stat-value" id="statWords">480 words</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Category Breakdown Grid -->
+            <!-- Category Breakdown Grid (6 Deep Categories) -->
             <div class="category-grid">
                 <div class="category-card">
                     <div class="category-header">
-                        <span><i class="fas fa-id-card"></i> Contact Info</span>
+                        <span><i class="fas fa-id-card"></i> Contact & Profiles</span>
                         <span class="category-score" id="catContactScore">0/15</span>
                     </div>
                     <div class="category-bar-bg">
@@ -110,27 +130,27 @@
 
                 <div class="category-card">
                     <div class="category-header">
-                        <span><i class="fas fa-list-alt"></i> Essential Sections</span>
-                        <span class="category-score" id="catSectionsScore">0/25</span>
+                        <span><i class="fas fa-laptop-code"></i> Tech Skills & CS Fundamentals</span>
+                        <span class="category-score" id="catSkillsScore">0/20</span>
                     </div>
                     <div class="category-bar-bg">
-                        <div class="category-bar-fill" id="catSectionsBar" style="width: 0%;"></div>
+                        <div class="category-bar-fill" id="catSkillsBar" style="width: 0%;"></div>
                     </div>
                 </div>
 
                 <div class="category-card">
                     <div class="category-header">
-                        <span><i class="fas fa-bolt"></i> Action Verbs</span>
-                        <span class="category-score" id="catVerbsScore">0/20</span>
+                        <span><i class="fas fa-project-diagram"></i> Projects & Proof-of-Work</span>
+                        <span class="category-score" id="catProjectsScore">0/25</span>
                     </div>
                     <div class="category-bar-bg">
-                        <div class="category-bar-fill" id="catVerbsBar" style="width: 0%;"></div>
+                        <div class="category-bar-fill" id="catProjectsBar" style="width: 0%;"></div>
                     </div>
                 </div>
 
                 <div class="category-card">
                     <div class="category-header">
-                        <span><i class="fas fa-chart-line"></i> Metrics & Impact</span>
+                        <span><i class="fas fa-chart-line"></i> Measurable Metrics (X-Y-Z)</span>
                         <span class="category-score" id="catMetricsScore">0/20</span>
                     </div>
                     <div class="category-bar-bg">
@@ -140,65 +160,148 @@
 
                 <div class="category-card">
                     <div class="category-header">
-                        <span><i class="fas fa-align-left"></i> Length & Format</span>
-                        <span class="category-score" id="catFormattingScore">0/20</span>
+                        <span><i class="fas fa-bolt"></i> Power Action Verbs</span>
+                        <span class="category-score" id="catVerbsScore">0/10</span>
                     </div>
                     <div class="category-bar-bg">
-                        <div class="category-bar-fill" id="catFormattingBar" style="width: 0%;"></div>
+                        <div class="category-bar-fill" id="catVerbsBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">
+                        <span><i class="fas fa-file-contract"></i> Structure & Format</span>
+                        <span class="category-score" id="catFormatScore">0/10</span>
+                    </div>
+                    <div class="category-bar-bg">
+                        <div class="category-bar-fill" id="catFormatBar" style="width: 0%;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Fixes & Recommendations -->
+            <!-- Student "Never Get Rejected" 10-Point Placement Checklist -->
+            <div class="checklist-section">
+                <div class="checklist-header">
+                    <div class="checklist-title">
+                        <i class="fas fa-shield-alt" style="color: var(--primary-color);"></i>
+                        <span>Student Placement & Interview Shield Checklist</span>
+                    </div>
+                    <div class="checklist-badge" id="checklistScoreBadge">10 / 10 Checks Passed</div>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+                    Every point on this checklist is required by automated enterprise ATS algorithms and Tier-1 tech campus recruiters to guarantee an interview call.
+                </p>
+
+                <div class="checklist-grid" id="checklistGrid">
+                    <!-- Dynamically generated by JS -->
+                </div>
+            </div>
+
+            <!-- Diagnosed Point Deductions & Fixes -->
             <div class="fixes-section">
                 <div class="fixes-header">
-                    <i class="fas fa-tools"></i>
-                    <span>Diagnosed Issues & Recommended Fixes</span>
+                    <i class="fas fa-calculator"></i>
+                    <span>Precise Point Audit & Missing Rejection Fixes</span>
                 </div>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 18px;">
+                    Below are the exact point deductions computed for your resume. Fix each highlighted item to raise your score above 95.
+                </p>
 
                 <div id="issuesList">
                     <!-- Dynamic issues inserted by JS -->
                 </div>
+            </div>
 
-                <!-- Suggested Rewrites / High Impact Examples -->
-                <div class="rewrite-box">
-                    <div class="rewrite-title">
-                        <i class="fas fa-lightbulb"></i> Formula for High-Scoring ATS Bullet Points:
+            <!-- Student "Never Get Rejected" Action Toolkit: High Impact Copy-Paste Templates -->
+            <div class="toolkit-section">
+                <div class="toolkit-header">
+                    <i class="fas fa-magic" style="color: var(--primary-color);"></i>
+                    <span>Student High-Impact Bullet Point Templates (Ready to Copy & Paste)</span>
+                </div>
+                <div class="toolkit-sub">
+                    Use these recruiter-approved <strong>Google X-Y-Z formula</strong> bullets in your resume projects to immediately score 95+ points and pass all technical screening rounds.
+                </div>
+
+                <!-- Template 1: Full Stack / Web Development -->
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-role">
+                            <i class="fas fa-globe"></i> Full-Stack Web Development Project
+                        </div>
+                        <button class="btn-copy-template" onclick="copySnippet(this, 'fullstack-snippet')">
+                            <i class="fas fa-copy"></i> Copy Bullets
+                        </button>
                     </div>
-                    <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.95rem;">
-                        Recruiter ATS systems look for the <strong>Google X-Y-Z Formula</strong>: <em>"Accomplished [X] as measured by [Y], by doing [Z]"</em>
+                    <ul class="template-bullets" id="fullstack-snippet">
+                        <li><strong>Architected & deployed</strong> a full-stack web application using React, Node.js, Express, and MongoDB, supporting <strong>2,500+ active users</strong>.</li>
+                        <li><strong>Engineered 12+ RESTful APIs</strong> with JWT-based authentication, reducing server response times by <strong>35%</strong>.</li>
+                        <li><strong>Optimized database queries</strong> and MongoDB indexing, slashing average data retrieval latency from 450ms to <strong>120ms</strong>.</li>
+                        <li><strong>Configured automated CI/CD pipelines</strong> using GitHub Actions and Docker, cutting staging deployment cycle times by <strong>40%</strong>.</li>
+                    </ul>
+                </div>
+
+                <!-- Template 2: AI / Machine Learning / Data Science -->
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-role">
+                            <i class="fas fa-brain"></i> Machine Learning & Data Science Project
+                        </div>
+                        <button class="btn-copy-template" onclick="copySnippet(this, 'ml-snippet')">
+                            <i class="fas fa-copy"></i> Copy Bullets
+                        </button>
+                    </div>
+                    <ul class="template-bullets" id="ml-snippet">
+                        <li><strong>Developed and evaluated</strong> a predictive machine learning model using Python, Scikit-Learn, and PyTorch, achieving <strong>94.2% classification accuracy</strong>.</li>
+                        <li><strong>Preprocessed and cleansed</strong> a dataset of <strong>100,000+ data points</strong>, eliminating missing values and engineering 15 high-correlation features.</li>
+                        <li><strong>Deployed the inference pipeline</strong> as a low-latency FastAPI microservice on cloud infrastructure, serving <strong>50+ requests/second</strong>.</li>
+                        <li><strong>Visualized key performance metrics</strong> using Streamlit and Matplotlib, presenting insights adopted by 150+ student researchers.</li>
+                    </ul>
+                </div>
+
+                <!-- Template 3: Mobile App or Frontend UI/UX -->
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-role">
+                            <i class="fas fa-mobile-alt"></i> Mobile App / Frontend UI Engineering
+                        </div>
+                        <button class="btn-copy-template" onclick="copySnippet(this, 'frontend-snippet')">
+                            <i class="fas fa-copy"></i> Copy Bullets
+                        </button>
+                    </div>
+                    <ul class="template-bullets" id="frontend-snippet">
+                        <li><strong>Engineered 18+ reusable UI components</strong> with React/Next.js and TailwindCSS, cutting frontend bundle size by <strong>28%</strong>.</li>
+                        <li><strong>Implemented client-side caching</strong> with React Query, lowering redundant network requests by <strong>45%</strong> and boosting Lighthouse score to 98/100.</li>
+                        <li><strong>Designed responsive, cross-platform layouts</strong> delivering seamless user experiences across mobile, tablet, and desktop screens with zero layout shifts.</li>
+                    </ul>
+                </div>
+
+                <!-- Student Summary Formula -->
+                <div class="template-card" style="border-left: 3px solid var(--primary-color);">
+                    <div class="template-header">
+                        <div class="template-role">
+                            <i class="fas fa-id-card-alt"></i> High-Converting Student Professional Summary Formula
+                        </div>
+                        <button class="btn-copy-template" onclick="copySnippet(this, 'summary-snippet')">
+                            <i class="fas fa-copy"></i> Copy Summary
+                        </button>
+                    </div>
+                    <p style="font-size: 0.92rem; line-height: 1.6; color: #e0e6ed;" id="summary-snippet">
+                        Results-driven Computer Science student with strong foundations in Data Structures & Algorithms, Full-Stack Web Development, and Cloud Technologies. Experienced in building scalable applications with React, Node.js, and MongoDB, with a demonstrated ability to optimize API latency by 35%+ and engineer resilient systems. Passionate about solving complex software engineering challenges in high-growth tech teams.
                     </p>
-
-                    <div class="rewrite-comparison">
-                        <div class="rewrite-before">
-                            <span class="rewrite-label">❌ Weak / Low ATS Score</span>
-                            Worked on the backend APIs and helped build database tables for the web app.
-                        </div>
-                        <div class="rewrite-after">
-                            <span class="rewrite-label">✅ Strong / High ATS Score</span>
-                            Architected and deployed 12+ RESTful microservices using Node.js & MongoDB, slashing API latency by 38%.
-                        </div>
-                    </div>
-
-                    <div class="rewrite-comparison">
-                        <div class="rewrite-before">
-                            <span class="rewrite-label">❌ Weak / Low ATS Score</span>
-                            Responsible for making the user interface responsive and fixing frontend bugs.
-                        </div>
-                        <div class="rewrite-after">
-                            <span class="rewrite-label">✅ Strong / High ATS Score</span>
-                            Engineered 10+ responsive React components, improving mobile page load speeds by 45% for 30,000+ monthly users.
-                        </div>
-                    </div>
                 </div>
 
                 <!-- CTA to build with templates -->
                 <div class="rebuild-cta">
-                    <h3>Want an automatic 95+ ATS Score?</h3>
-                    <p>All Resume Spark templates are pre-engineered to pass enterprise Applicant Tracking Systems with clean section parsing.</p>
-                    <a href="templates.html" class="btn-cta-template">
-                        <i class="fas fa-layer-group"></i> Pick an ATS-Optimized Template
-                    </a>
+                    <h3>Ready to build your 98+ ATS Resume?</h3>
+                    <p>Open Resume Spark's ATS-engineered templates to guarantee 100% keyword parsing, clean single-page formatting, and immediate recruiter callbacks.</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <a href="templates.html" class="btn-cta-template">
+                            <i class="fas fa-layer-group"></i> Pick an ATS-Optimized Template
+                        </a>
+                        <a href="page2.html" class="btn-cta-template" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">
+                            <i class="fas fa-edit"></i> Edit in Resume Spark Builder
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
