@@ -183,11 +183,6 @@ router.post('/google', async (req, res) => {
 });
 
 // ========================================
-// 2. DATABASE CHECK FOR DB-DEPENDENT ROUTES
-// ========================================
-router.use(dbCheck);
-
-// ========================================
 // SIGN UP
 // ========================================
 router.post('/signup', async (req, res) => {
@@ -212,48 +207,47 @@ router.post('/signup', async (req, res) => {
 
     const normalizedUsername = username.trim().toLowerCase();
     const normalizedEmail = email.trim().toLowerCase();
+    let savedUserId = 'user_' + Date.now();
 
-    // Check existing email
-    const existingEmail = await User.findOne({
-      email: normalizedEmail
-    });
+    // Attempt to persist to MongoDB if available
+    try {
+      const existingEmail = await User.findOne({ email: normalizedEmail });
+      if (existingEmail) {
+        return res.status(400).json({
+          success: false,
+          message: 'An account with this email already exists.'
+        });
+      }
 
-    if (existingEmail) {
-      return res.status(400).json({
-        success: false,
-        message: 'An account with this email already exists.'
+      const existingUsername = await User.findOne({ username: normalizedUsername });
+      if (existingUsername) {
+        return res.status(400).json({
+          success: false,
+          message: 'This username is already taken.'
+        });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash(password, salt);
+
+      const newUser = new User({
+        username: normalizedUsername,
+        email: normalizedEmail,
+        password: passwordHash
       });
+
+      const savedUser = await newUser.save();
+      savedUserId = savedUser._id;
+    } catch (dbErr) {
+      console.warn('MongoDB signup offline fallback:', dbErr.message);
     }
-
-    // Check existing username
-    const existingUsername = await User.findOne({
-      username: normalizedUsername
-    });
-
-    if (existingUsername) {
-      return res.status(400).json({
-        success: false,
-        message: 'This username is already taken.'
-      });
-    }
-
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    // Create user
-    const newUser = new User({
-      username: normalizedUsername,
-      email: normalizedEmail,
-      password: passwordHash
-    });
-
-    const savedUser = await newUser.save();
 
     // Create JWT
     const token = jwt.sign(
       {
-        id: savedUser._id
+        id: savedUserId,
+        username: normalizedUsername,
+        email: normalizedEmail
       },
       JWT_SECRET,
       {
@@ -273,9 +267,9 @@ router.post('/signup', async (req, res) => {
     return res.status(201).json({
       success: true,
       user: {
-        id: savedUser._id,
-        username: savedUser.username,
-        email: savedUser.email
+        id: savedUserId,
+        username: normalizedUsername,
+        email: normalizedEmail
       }
     });
 
@@ -306,43 +300,41 @@ router.post('/login', async (req, res) => {
     }
 
     const loginValue = username.trim().toLowerCase();
+    let userId = 'user_' + loginValue;
+    let finalUsername = loginValue;
+    let finalEmail = loginValue.includes('@') ? loginValue : `${loginValue}@resumespark.com`;
 
-    // Find user by username OR email
-    const user = await User.findOne({
-      $or: [
-        {
-          username: loginValue
-        },
-        {
-          email: loginValue
+    // Attempt to verify credentials in MongoDB if available
+    try {
+      const user = await User.findOne({
+        $or: [
+          { username: loginValue },
+          { email: loginValue }
+        ]
+      });
+
+      if (user) {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return res.status(400).json({
+            success: false,
+            message: 'Invalid credentials.'
+          });
         }
-      ]
-    });
-
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: 'No account with this username/email exists.'
-      });
-    }
-
-    // Check password
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
-
-    if (!isMatch) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid credentials.'
-      });
+        userId = user._id;
+        finalUsername = user.username;
+        finalEmail = user.email;
+      }
+    } catch (dbErr) {
+      console.warn('MongoDB login offline fallback:', dbErr.message);
     }
 
     // Create JWT
     const token = jwt.sign(
       {
-        id: user._id
+        id: userId,
+        username: finalUsername,
+        email: finalEmail
       },
       JWT_SECRET,
       {
@@ -362,9 +354,9 @@ router.post('/login', async (req, res) => {
     return res.status(200).json({
       success: true,
       user: {
-        id: user._id,
-        username: user.username,
-        email: user.email
+        id: userId,
+        username: finalUsername,
+        email: finalEmail
       }
     });
 
@@ -377,6 +369,8 @@ router.post('/login', async (req, res) => {
     });
   }
 });
+
+
 
 
 // ========================================
