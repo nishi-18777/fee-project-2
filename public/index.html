@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume spark</title>
+    <link rel="stylesheet" href="css/page1.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<div id="container" class="container">
+    <!-- FORM SECTION -->
+    <div class="row">
+        <!-- SIGN UP -->
+        <div class="col align-items-center flex-col sign-up">
+            <div class="form-wrapper align-items-center">
+                <div class="form sign-up">
+                    <h2 class="form-title">Join with us <span class="sparkle">✨</span></h2>
+                    <div class="input-group">
+                        <i class='bx bxs-user'></i>
+                        <input type="text" id="signup-username" placeholder="Username">
+                    </div>
+                    <div class="input-group">
+                        <i class='bx bx-mail-send'></i>
+                        <input type="email" id="signup-email" placeholder="Email">
+                    </div>
+                    <div class="input-group">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" id="signup-password" placeholder="Password">
+                    </div>
+                    <div class="input-group">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" id="signup-confirm-password" placeholder="Confirm password">
+                    </div>
+                    <div id="signup-error" class="error-msg" style="color: #ff4d4d; margin-bottom: 10px; font-weight: bold; text-align: center;"></div>
+                    <button id="signup-btn">
+                       Sign Up
+                    </button>
+                    <button id="signup-guest-btn" type="button" class="guest-btn" style="margin-top: 10px; width: 100%; padding: 11px; border-radius: 8px; border: 1.5px solid #00f2fe; background: rgba(0, 242, 254, 0.08); color: #00f2fe; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span>🚀</span> Continue as Guest (Demo Mode)
+                    </button>
+                    <div style="margin: 15px 0; display: flex; justify-content: center;" id="google-signin-btn-signup"></div>
+                    <p>
+                        <span>
+                            Already have an account?
+                        </span>
+                        <b onclick="toggle()" class="pointer">
+                            Sign in here
+                        </b>
+                    </p>
+                </div>
+            </div>
+        
+        </div>
+        <!-- END SIGN UP -->
+        <!-- SIGN IN -->
+        <div class="col align-items-center flex-col sign-in">
+            <div class="form-wrapper align-items-center">
+                <div class="form sign-in">
+                    <h2 class="form-title">Welcome <span class="wave-emoji">👋</span></h2>
+                    <div class="input-group">
+                        <i class='bx bxs-user'></i>
+                        <input type="text" id="signin-username" placeholder="Username">
+                    </div>
+                    <div class="input-group">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" id="signin-password" placeholder="Password">
+                    </div>
+                    <div id="signin-error" class="error-msg" style="color: #ff4d4d; margin-bottom: 10px; font-weight: bold; text-align: center;"></div>
+                    <button id="signin-btn">
+                    Sign In
+                    </button>
+                    <button id="signin-guest-btn" type="button" class="guest-btn" style="margin-top: 10px; width: 100%; padding: 11px; border-radius: 8px; border: 1.5px solid #00f2fe; background: rgba(0, 242, 254, 0.08); color: #00f2fe; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span>🚀</span> Continue as Guest (Demo Mode)
+                    </button>
+                    <div style="margin: 15px 0; display: flex; justify-content: center;" id="google-signin-btn-login"></div>
+                    <p>
+                        <b class="pointer forgot-pw">
+                            Forgot password?
+                        </b>
+                    </p>
+                    <p>
+                        <span>
+                            Don't have an account?
+                        </span>
+                        <b onclick="toggle()" class="pointer">
+                            Sign up here
+                        </b>
+                    </p>
+                </div>
+            </div>
+            <div class="form-wrapper">
+    
+            </div>
+        </div>
+        <!-- END SIGN IN -->
+    </div>
+    <!-- END FORM SECTION -->
+    <!-- CONTENT SECTION -->
+    <div class="row content-row">
+        <!-- SIGN IN CONTENT -->
+        <div class="col align-items-center flex-col">
+            <div class="text sign-in">
+            <h2>
+               Resume<br>
+               Spark!
+            </h2>
+            <p>
+               Light up your career path with a perfect resume.
+            </p>
+            </div>
+            <div class="img sign-in">
+    
+            </div>
+        </div>
+        <!-- END SIGN IN CONTENT -->
+        <!-- SIGN UP CONTENT -->
+        <div class="col align-items-center flex-col">
+            <div class="img sign-up">
+            
+            </div>
+            <div class="text sign-up">
+                <h2>
+                Create.<br>
+                Connect.<br>
+                <span class="highlight">Grow.</span>
+                </h2>
+                <p>
+                Join our community and explore endless opportunities.
+                </p>
+            </div>
+        </div>
+        <!-- END SIGN UP CONTENT -->
+    </div>
+    <!-- END CONTENT SECTION -->
+</div>
+<script src="js/navbar.js"></script>
+<script src="js/page1.js">
+    
+</script>
+</body>
+</html>
