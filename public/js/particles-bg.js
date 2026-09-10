@@ -11,7 +11,7 @@
         canvas.style.width = '100vw';
         canvas.style.height = '100vh';
         canvas.style.pointerEvents = 'none';
-        canvas.style.zIndex = '1';
+        canvas.style.zIndex = '0';
         canvas.style.opacity = '1';
         document.body.prepend(canvas);
 
@@ -31,8 +31,14 @@
         };
 
         window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
+            // Keep background effects strictly behind content; do not draw lines over cards or resume previews
+            if (e.target && e.target.closest && e.target.closest('.card, .a4-paper, .a4-resume-paper, .form, .resume-card, .upload-card')) {
+                mouse.x = null;
+                mouse.y = null;
+            } else {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            }
         });
 
         window.addEventListener('mouseleave', () => {
