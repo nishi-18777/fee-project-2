@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        (function() {
+            const hasCookieToken = document.cookie.split(';').some(c => c.trim().startsWith('token='));
+            const localUser = localStorage.getItem('currentUser');
+            const isStandalone = window.location.protocol === 'file:' || !hasCookieToken;
+            if (isStandalone && !localUser) {
+                window.location.href = 'login page.html';
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Resumes - ResumeSpark</title>
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #0083b0;
+            --accent: #4facfe;
+            --bg-dark: #030305;
+            --card-bg: rgba(14, 18, 26, 0.85);
+            --card-border: rgba(0, 242, 254, 0.2);
+            --card-hover: rgba(0, 242, 254, 0.55);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --danger: #ff4d4f;
+            --danger-hover: #ff7875;
+            --success: #00e676;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-top: 90px;
+            padding-bottom: 70px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Top Hero Header */
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(0, 179, 219, 0.15) 0%, rgba(0, 242, 254, 0.08) 100%), var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 35px 40px;
+            margin-bottom: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 254, 0.08);
+        }
+
+        .hero-title-area h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #ffffff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .hero-title-area h1 i {
+            -webkit-text-fill-color: initial;
+            color: var(--primary);
+            text-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+        }
+
+        .hero-title-area p {
+            color: var(--text-muted);
+            margin-top: 8px;
+            font-size: 0.98rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .count-badge {
+            background: rgba(0, 242, 254, 0.12);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-create-new {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: #030305;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+        }
+
+        .btn-create-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.7);
+            color: #000;
+        }
+
+        /* Resumes Grid */
+        .resumes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .resume-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .resume-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--card-hover);
+            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.25);
+        }
+
+        .thumbnail-wrapper {
+            position: relative;
+            width: 100%;
+            height: 290px;
+            background: #090c10;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .thumbnail-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform 0.5s ease;
+        }
+
+        .resume-card:hover .thumbnail-wrapper img {
+            transform: scale(1.04);
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(3, 3, 5, 0.85);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .resume-header {
+            margin-bottom: 16px;
+        }
+
+        .resume-title {
+            font-size: 1.22rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .resume-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .resume-date i {
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 11px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: none;
+        }
+
+        .btn-action.edit {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: #030305;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+        }
+
+        .btn-action.edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(0, 242, 254, 0.45);
+        }
+
+        .btn-action.ats {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(0, 242, 254, 0.35);
+        }
+
+        .btn-action.ats:hover {
+            background: rgba(0, 242, 254, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-action.delete {
+            flex: 0 0 44px;
+            background: rgba(255, 77, 79, 0.12);
+            color: var(--danger);
+            border: 1px solid rgba(255, 77, 79, 0.3);
+        }
+
+        .btn-action.delete:hover {
+            background: var(--danger);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 77, 79, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 30px;
+            background: var(--card-bg);
+            border: 1px dashed var(--card-border);
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            margin: 20px 0 60px 0;
+        }
+
+        .empty-state-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            color: var(--primary);
+            box-shadow: 0 0 35px rgba(0, 242, 254, 0.2);
+        }
+
+        .empty-state h2 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+            max-width: 520px;
+            margin: 0 auto 30px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .loading-box {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 100px 20px;
+            color: var(--text-muted);
+        }
+
+        .loading-box i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 18px;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .hero-banner {
+                padding: 25px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .hero-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .resumes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Hero Banner -->
+        <div class="hero-banner">
+            <div class="hero-title-area">
+                <h1><i class="fas fa-layer-group"></i> My Saved Resumes</h1>
+                <p>Access, update, and run ATS scans on your saved resume drafts anytime.</p>
+            </div>
+            <div class="hero-actions">
+                <span class="count-badge" id="resumeCountBadge">
+                    <i class="fas fa-file-alt"></i> <span id="countNumber">0</span> Resumes
+                </span>
+                <a href="templates.html" class="btn-create-new">
+                    <i class="fas fa-plus"></i> New Resume
+                </a>
+            </div>
+        </div>
+
+        <!-- Resumes Grid Container -->
+        <div class="resumes-grid" id="resumesGrid">
+            <div class="loading-box">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading your saved resumes from cloud database...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        const templateMetadata = {
+            'template1': { name: 'Professional Resume', img: 'assets/pic 1.png' },
+            'template2': { name: 'Structured Resume', img: 'assets/pic 2.png' },
+            'template3': { name: 'Blog Resume', img: 'assets/pic 3.png' },
+            'template4': { name: 'Interactive Resume', img: 'assets/pic 4.png' },
+            'template5': { name: 'Infographic Resume', img: 'assets/PIC 5.png' },
+            'template6': { name: 'Swiss Minimalist Resume', img: 'assets/minimalist_editorial_resume.jpg' },
+            'template7': { name: 'Two-Column Professional', img: 'assets/twocolumn_elegant_a4_resume.jpg' },
+            'template8': { name: 'Classic Navy Bordered', img: 'assets/bordered_creative_a4_resume.jpg' },
+            'template9': { name: 'Creative Pastel Card', img: 'assets/creative_pastel_card_resume.jpg' }
+        };
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Recently';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        async function fetchSavedResumes() {
+            const grid = document.getElementById('resumesGrid');
+            const badge = document.getElementById('countNumber');
+
+            try {
+                const response = await fetch('/api/resumes/my-resumes');
+                const data = await response.json();
+
+                if (data.success && data.resumes && data.resumes.length > 0) {
+                    badge.textContent = data.resumes.length;
+                    grid.innerHTML = '';
+
+                    data.resumes.forEach(resume => {
+                        const meta = templateMetadata[resume.templateId] || {
+                            name: `Template - ${resume.templateId}`,
+                            img: 'assets/pic 1.png'
+                        };
+
+                        const card = document.createElement('div');
+                        card.className = 'resume-card';
+                        card.id = `card-${resume.templateId}`;
+                        card.innerHTML = `
+                            <div class="thumbnail-wrapper">
+                                <img src="${meta.img}" alt="${meta.name}" onerror="this.src='assets/pic 1.png'">
+                                <span class="card-tag">${resume.templateId.toUpperCase()}</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="resume-header">
+                                    <h2 class="resume-title">${meta.name}</h2>
+                                    <div class="resume-date">
+                                        <i class="far fa-clock"></i>
+                                        <span>Saved: ${formatDate(resume.updatedAt)}</span>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="${resume.templateId}.html" class="btn-action edit">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="ats-checker.html" class="btn-action ats">
+                                        <i class="fas fa-tachometer-alt"></i> ATS Check
+                                    </a>
+                                    <button class="btn-action delete" onclick="deleteResume('${resume.templateId}')" title="Delete Resume">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                } else {
+                    renderEmptyState();
+                }
+            } catch (err) {
+                console.error('Error fetching resumes:', err);
+                renderEmptyState();
+            }
+        }
+
+        function renderEmptyState() {
+            document.getElementById('countNumber').textContent = '0';
+            const grid = document.getElementById('resumesGrid');
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <h2>No Saved Resumes Yet</h2>
+                    <p>You haven't customized any resumes yet. Choose a template from our collection to begin crafting your interview-winning resume!</p>
+                    <a href="templates.html" class="btn-create-new">
+                        <i class="fas fa-magic"></i> Explore Templates
+                    </a>
+                </div>
+            `;
+        }
+
+        async function deleteResume(templateId) {
+            const meta = templateMetadata[templateId] || { name: templateId };
+            if (!confirm(`Are you sure you want to delete your saved "${meta.name}"?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/resumes/delete/${templateId}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    const card = document.getElementById(`card-${templateId}`);
+                    if (card) {
+                        card.style.transition = 'all 0.4s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.85)';
+                        setTimeout(() => {
+                            card.remove();
+                            const currentCount = parseInt(document.getElementById('countNumber').textContent) || 1;
+                            const newCount = Math.max(0, currentCount - 1);
+                            document.getElementById('countNumber').textContent = newCount;
+                            if (newCount === 0) {
+                                renderEmptyState();
+                            }
+                        }, 400);
+                    }
+                } else {
+                    alert(data.message || 'Failed to delete resume.');
+                }
+            } catch (err) {
+                console.error('Error deleting resume:', err);
+                alert('Could not delete resume right now. Please try again.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchSavedResumes);
+    </script>
+</body>
+</html>

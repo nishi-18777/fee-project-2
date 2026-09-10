@@ -15,539 +15,798 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile - ResumeSpark</title>
     <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #0083b0;
+            --bg-dark: #030305;
+            --card-bg: rgba(12, 14, 20, 0.82);
+            --card-border: rgba(0, 242, 254, 0.18);
+            --card-border-hover: rgba(0, 242, 254, 0.5);
+            --text-main: #ffffff;
+            --text-muted: #8a99ad;
+            --success: #00e676;
+            --font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body, html {
-            height: 100%;
-            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-            background: #050508;
-            color: #ffffff;
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+            padding-top: 85px;
+            padding-bottom: 70px;
         }
 
-        .background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 80% 20%, rgba(0, 242, 254, 0.15), transparent 45%),
-                        radial-gradient(circle at 15% 85%, rgba(0, 180, 219, 0.12), transparent 40%),
-                        #050508;
-            z-index: -1;
+        .profile-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        .main-container {
-            max-width: 1200px;
-            margin: 110px auto 50px auto;
-            padding: 0 30px;
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 40px;
-        }
-
-        /* Glassmorphic Cards styling */
-        .glass-card {
-            background: rgba(13, 13, 17, 0.7);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 242, 254, 0.15);
+        /* Hero Header Profile Card */
+        .profile-hero {
+            background: linear-gradient(135deg, rgba(0, 179, 219, 0.12) 0%, rgba(0, 242, 254, 0.08) 100%), var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
             border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 242, 254, 0.03);
-            padding: 35px;
-            transition: all 0.3s ease;
-        }
-
-        .glass-card:hover {
-            border-color: rgba(0, 242, 254, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 242, 254, 0.1);
-        }
-
-        /* Profile Left Sidebar */
-        .profile-sidebar {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            height: fit-content;
-            position: sticky;
-            top: 110px;
-        }
-
-        .profile-avatar-large {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            background: linear-gradient(90deg, #00b4db, #00f2fe);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #050d12;
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 25px;
-            border: 3px solid rgba(0, 242, 254, 0.3);
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
-            text-transform: uppercase;
-        }
-
-        .profile-username {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 8px;
-            text-transform: capitalize;
-            letter-spacing: 0.5px;
-        }
-
-        .profile-email {
-            font-size: 0.9rem;
-            color: #94a3b8;
+            padding: 35px 40px;
             margin-bottom: 30px;
-            word-break: break-all;
-        }
-
-        .profile-stats {
-            width: 100%;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 25px;
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #00f2fe;
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: #64748b;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        /* Profile Main Content */
-        .profile-content {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.15);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 254, 0.08);
+            position: relative;
+            z-index: 1;
         }
 
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #00f2fe;
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        .hero-left {
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .section-title i {
-            font-size: 1.3rem;
-        }
-
-        /* Resumes Grid Layout */
-        .resumes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 25px;
         }
 
-        .resume-card {
-            background: rgba(20, 20, 28, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .resume-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 242, 254, 0.25);
-            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.08);
-        }
-
-        .resume-thumbnail-wrapper {
-            position: relative;
-            width: 100%;
-            height: 180px;
-            background: #101016;
-            overflow: hidden;
+        .hero-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00b4db, #00f2fe);
+            color: #050d12;
+            font-size: 2.8rem;
+            font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .resume-thumbnail {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.85;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .resume-card:hover .resume-thumbnail {
-            transform: scale(1.05);
-            opacity: 1;
-        }
-
-        .resume-card-details {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .resume-name {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: #f8fafc;
-            margin-bottom: 6px;
+            border: 3px solid rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
             text-transform: uppercase;
         }
 
-        .resume-date {
-            font-size: 0.75rem;
-            color: #64748b;
-            margin-bottom: 20px;
-        }
-
-        .resume-actions {
+        .hero-details h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-top: auto;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .btn-edit {
-            flex-grow: 1;
-            padding: 8px 16px;
+        .hero-badge {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .hero-role {
+            font-size: 1.05rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .hero-email {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action-primary {
             background: linear-gradient(90deg, #00b4db, #00f2fe);
             color: #050d12;
-            border: none;
-            border-radius: 6px;
             font-weight: 700;
-            font-size: 0.85rem;
-            text-align: center;
+            font-size: 0.95rem;
+            padding: 12px 26px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.35);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             text-decoration: none;
+        }
+
+        .btn-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(0, 242, 254, 0.55);
+        }
+
+        .btn-action-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 12px 24px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-        }
-
-        .btn-edit:hover {
-            box-shadow: 0 4px 12px rgba(0, 242, 254, 0.35);
-            transform: translateY(-1px);
-        }
-
-        .btn-delete {
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: #f87171;
             display: flex;
-            justify-content: center;
             align-items: center;
-            cursor: pointer;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-action-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0, 242, 254, 0.08);
+        }
+
+        /* 3-Card Metrics Bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 22px 26px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--card-border-hover);
+        }
+
+        .metric-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: rgba(0, 242, 254, 0.12);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .metric-content h4 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .metric-content .val {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        /* Main Form Sections Grid */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-section-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.25s;
+        }
+
+        .form-section-card:hover {
+            border-color: rgba(0, 242, 254, 0.35);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-header i {
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-field {
+            margin-bottom: 16px;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-field input, .form-field textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 11px 14px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
             transition: all 0.2s ease;
         }
 
-        .btn-delete:hover {
-            background: #ef4444;
-            color: #ffffff;
-            border-color: #ef4444;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+        .form-field input:focus, .form-field textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+            background: rgba(10, 22, 30, 0.85);
         }
 
-        /* Empty State */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 60px 40px;
-            color: #94a3b8;
-            grid-column: 1 / -1;
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            color: #334155;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            color: #f8fafc;
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .empty-state p {
-            font-size: 0.9rem;
-            margin-bottom: 25px;
-            max-width: 400px;
+        .form-field textarea {
+            resize: vertical;
+            min-height: 100px;
             line-height: 1.5;
         }
 
-        .btn-create {
-            padding: 12px 28px;
-            background: linear-gradient(90deg, #00b4db, #00f2fe);
-            color: #050d12;
-            border: none;
+        /* Skills Tags Box */
+        .skills-tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            margin-bottom: 14px;
+        }
+
+        .skill-tag {
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-tag .remove-skill {
+            cursor: pointer;
+            opacity: 0.7;
+            font-size: 0.75rem;
+        }
+
+        .skill-tag .remove-skill:hover {
+            opacity: 1;
+            color: #ff5252;
+        }
+
+        .skill-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-add-skill {
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 18px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 0.95rem;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
-            transition: all 0.3s ease;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .btn-create:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.45);
+        .btn-add-skill:hover {
+            background: var(--primary);
+            color: #050d12;
         }
 
-        /* Responsive */
+        /* Floating Toast Notification */
+        .toast-notify {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(12, 14, 20, 0.95);
+            border: 1px solid var(--success);
+            border-left: 4px solid var(--success);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 230, 118, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-weight: 600;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99999;
+        }
+
+        .toast-notify.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
         @media (max-width: 900px) {
-            .main-container {
+            .profile-grid {
                 grid-template-columns: 1fr;
             }
-            .profile-sidebar {
-                position: relative;
-                top: 0;
+            .profile-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-left {
+                flex-direction: column;
+            }
+            .hero-details h1 {
+                justify-content: center;
+            }
+            .hero-email {
+                justify-content: center;
+            }
+            .hero-right {
+                justify-content: center;
+                width: 100%;
             }
         }
 
-        @media (max-width: 480px) {
-            .main-container {
-                padding: 0 15px;
-                margin-top: 90px;
-                gap: 20px;
+        @media (max-width: 600px) {
+            .input-row {
+                grid-template-columns: 1fr;
             }
-            .glass-card {
-                padding: 20px 15px;
+            .profile-hero {
+                padding: 25px 20px;
             }
-            .profile-avatar-large {
+            .hero-avatar {
                 width: 80px;
                 height: 80px;
                 font-size: 2.2rem;
-            }
-            .profile-username {
-                font-size: 1.3rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="background-overlay"></div>
-
-    <div class="main-container">
-        <!-- Sidebar -->
-        <aside class="glass-card profile-sidebar">
-            <div class="profile-avatar-large" id="profileAvatarLarge">U</div>
-            <h2 class="profile-username" id="profileUsername">Loading...</h2>
-            <p class="profile-email" id="profileEmail">loading...</p>
-
-            <div class="profile-stats">
-                <div class="stat-item">
-                    <span class="stat-value" id="statsResumeCount">0</span>
-                    <span class="stat-label">Saved Resumes</span>
+    <div class="profile-container">
+        <!-- Hero Header Profile Card -->
+        <div class="profile-hero">
+            <div class="hero-left">
+                <div class="hero-avatar" id="avatarDisplay">N</div>
+                <div class="hero-details">
+                    <h1>
+                        <span id="nameDisplay">Nishi Dhiman</span>
+                        <span class="hero-badge">Verified Candidate</span>
+                    </h1>
+                    <div class="hero-role" id="roleDisplay">Full Stack Software Engineer</div>
+                    <div class="hero-email">
+                        <i class="fas fa-envelope"></i>
+                        <span id="emailDisplay">nishidhiman2006@gmail.com</span>
+                    </div>
                 </div>
             </div>
-        </aside>
 
-        <!-- Main Content Area -->
-        <main class="glass-card profile-content">
-            <div class="section-header" id="saved-resumes">
-                <h2 class="section-title">
-                    <i class="fas fa-file-alt"></i> My Saved Resumes
-                </h2>
+            <div class="hero-right">
+                <button type="button" class="btn-action-primary" id="btnSaveProfile">
+                    <i class="fas fa-save"></i> Save Profile Details
+                </button>
+                <a href="saved-resumes.html" class="btn-action-secondary">
+                    <i class="fas fa-file-alt"></i> View Saved Resumes
+                </a>
+            </div>
+        </div>
+
+        <!-- 3-Card Metrics Bar -->
+        <div class="metrics-bar">
+            <div class="metric-card">
+                <div class="metric-icon"><i class="fas fa-file-invoice"></i></div>
+                <div class="metric-content">
+                    <h4>Saved Resumes</h4>
+                    <div class="val" id="statsResumeCount">0</div>
+                </div>
             </div>
 
-            <!-- Resumes Grid -->
-            <div class="resumes-grid" id="resumesGrid">
-                <!-- Javascript will load resumes here -->
+            <div class="metric-card">
+                <div class="metric-icon"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="metric-content">
+                    <h4>ATS Placement Score</h4>
+                    <div class="val" style="color: var(--primary);">98%</div>
+                </div>
             </div>
-        </main>
+
+            <div class="metric-card">
+                <div class="metric-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="metric-content">
+                    <h4>Profile Completeness</h4>
+                    <div class="val" style="color: var(--success);" id="statsCompleteness">95%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Sections Grid -->
+        <div class="profile-grid">
+            <!-- 1. Personal & Contact Details -->
+            <div class="form-section-card">
+                <div class="card-header">
+                    <i class="fas fa-id-card"></i>
+                    <h3>Personal Information</h3>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-field">
+                        <label>First Name</label>
+                        <input type="text" id="inputFirstName" placeholder="e.g. Nishi">
+                    </div>
+                    <div class="form-field">
+                        <label>Last Name</label>
+                        <input type="text" id="inputLastName" placeholder="e.g. Dhiman">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-field">
+                        <label>Username</label>
+                        <input type="text" id="inputUsername" placeholder="e.g. nishi" readonly style="opacity: 0.8;">
+                    </div>
+                    <div class="form-field">
+                        <label>Email Address</label>
+                        <input type="email" id="inputEmail" placeholder="your.email@example.com">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="form-field">
+                        <label>Phone Number</label>
+                        <input type="tel" id="inputPhone" placeholder="+91 98765 43210">
+                    </div>
+                    <div class="form-field">
+                        <label>Current City / Location</label>
+                        <input type="text" id="inputLocation" placeholder="e.g. New Delhi, India">
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label>Target Professional Title</label>
+                    <input type="text" id="inputRole" placeholder="e.g. Full Stack Developer / SDE Intern">
+                </div>
+            </div>
+
+            <!-- 2. Developer & Interview Profile Links -->
+            <div class="form-section-card">
+                <div class="card-header">
+                    <i class="fas fa-code-branch"></i>
+                    <h3>Developer & Interview Links</h3>
+                </div>
+
+                <div class="form-field">
+                    <label><i class="fab fa-github" style="color: var(--primary); margin-right: 6px;"></i> GitHub Profile URL</label>
+                    <input type="url" id="inputGithub" placeholder="https://github.com/nishi-18777">
+                </div>
+
+                <div class="form-field">
+                    <label><i class="fas fa-laptop-code" style="color: #ffa116; margin-right: 6px;"></i> LeetCode / Coding Profile URL</label>
+                    <input type="url" id="inputLeetcode" placeholder="https://leetcode.com/username">
+                </div>
+
+                <div class="form-field">
+                    <label><i class="fab fa-linkedin" style="color: #0077b5; margin-right: 6px;"></i> LinkedIn Profile URL</label>
+                    <input type="url" id="inputLinkedin" placeholder="https://linkedin.com/in/username">
+                </div>
+
+                <div class="form-field">
+                    <label><i class="fas fa-globe" style="color: var(--primary); margin-right: 6px;"></i> Portfolio / Personal Website</label>
+                    <input type="url" id="inputPortfolio" placeholder="https://yourportfolio.dev">
+                </div>
+            </div>
+
+            <!-- 3. Education & Academic Details -->
+            <div class="form-section-card">
+                <div class="card-header">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Education & Academics</h3>
+                </div>
+
+                <div class="form-field">
+                    <label>College / University Name</label>
+                    <input type="text" id="inputCollege" placeholder="e.g. Delhi Technological University (DTU)">
+                </div>
+
+                <div class="input-row">
+                    <div class="form-field">
+                        <label>Degree & Major</label>
+                        <input type="text" id="inputDegree" placeholder="B.Tech Computer Science">
+                    </div>
+                    <div class="form-field">
+                        <label>Graduation Year</label>
+                        <input type="text" id="inputGradYear" placeholder="2024">
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label>CGPA / GPA</label>
+                    <input type="text" id="inputGpa" placeholder="8.85 / 10.0">
+                </div>
+            </div>
+
+            <!-- 4. Professional Summary & Technical Skills -->
+            <div class="form-section-card">
+                <div class="card-header">
+                    <i class="fas fa-tools"></i>
+                    <h3>About Me & Technical Skills</h3>
+                </div>
+
+                <div class="form-field">
+                    <label>Professional Summary (3-Sentence Pitch)</label>
+                    <textarea id="inputBio" placeholder="Results-driven Computer Science graduate with strong command of Data Structures, React, Node.js, and MongoDB. Passionate about engineering high-performance systems."></textarea>
+                </div>
+
+                <div class="form-field">
+                    <label>Technical Skills</label>
+                    <div class="skills-tag-container" id="skillsTagContainer">
+                        <!-- Dynamic Tags -->
+                    </div>
+                    <div class="skill-input-group">
+                        <input type="text" id="newSkillInput" placeholder="Add skill (e.g. React, Python, Docker, DSA)...">
+                        <button type="button" class="btn-add-skill" id="btnAddSkill">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Toast Notification -->
+    <div class="toast-notify" id="toastNotify">
+        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.3rem;"></i>
+        <span id="toastMsg">Profile details updated successfully!</span>
     </div>
 
     <script src="js/navbar.js"></script>
     <script>
-        // Mapping of template IDs to thumbnail images and display names
-        const templateMetadata = {
-            'template1': { name: 'Professional Resume', img: 'assets/pic 1.png' },
-            'template2': { name: 'Structured Resume', img: 'assets/pic 2.png' },
-            'template3': { name: 'Blog Resume', img: 'assets/pic 3.png' },
-            'template4': { name: 'Interactive Resume', img: 'assets/pic 4.png' },
-            'template5': { name: 'Infographic Resume', img: 'assets/PIC 5.png' },
-            'template6': { name: 'Swiss Minimalist Resume', img: 'assets/minimalist_editorial_resume.jpg' },
-            'template7': { name: 'Two-Column Professional', img: 'assets/twocolumn_elegant_a4_resume.jpg' },
-            'template8': { name: 'Classic Navy Bordered', img: 'assets/bordered_creative_a4_resume.jpg' },
-            'template9': { name: 'Creative Pastel Card', img: 'assets/creative_pastel_card_resume.jpg' }
-        };
-
-        // Format Date Helper
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-
-        // Initialize profile details
         document.addEventListener('DOMContentLoaded', () => {
-            const localUser = localStorage.getItem('currentUser');
-            if (localUser) {
-                const user = JSON.parse(localUser);
-                document.getElementById('profileUsername').textContent = user.username;
-                document.getElementById('profileEmail').textContent = user.email;
-                document.getElementById('profileAvatarLarge').textContent = user.username.charAt(0).toUpperCase();
+            let currentSkills = ['JavaScript', 'TypeScript', 'React.js', 'Node.js', 'Express.js', 'MongoDB', 'Data Structures (DSA)', 'Git'];
+
+            // 1. Load Current User Data from localStorage
+            const localUserStr = localStorage.getItem('currentUser');
+            let currentUser = localUserStr ? JSON.parse(localUserStr) : { username: 'User', email: 'user@resumespark.com' };
+
+            // Load extended profile data
+            const savedProfileStr = localStorage.getItem('userProfile');
+            let profileData = savedProfileStr ? JSON.parse(savedProfileStr) : {};
+
+            // Populate Fields
+            const firstName = profileData.firstName || currentUser.username.split(' ')[0] || 'User';
+            const lastName = profileData.lastName || (currentUser.username.split(' ')[1] || '');
+            const fullName = `${firstName} ${lastName}`.trim();
+
+            document.getElementById('avatarDisplay').textContent = firstName.charAt(0).toUpperCase();
+            document.getElementById('nameDisplay').textContent = fullName;
+            document.getElementById('emailDisplay').textContent = currentUser.email || profileData.email || 'user@resumespark.com';
+            document.getElementById('roleDisplay').textContent = profileData.role || 'Full Stack Software Engineer';
+
+            document.getElementById('inputFirstName').value = firstName;
+            document.getElementById('inputLastName').value = lastName;
+            document.getElementById('inputUsername').value = currentUser.username;
+            document.getElementById('inputEmail').value = currentUser.email || profileData.email || '';
+            document.getElementById('inputPhone').value = profileData.phone || '+91 98765 43210';
+            document.getElementById('inputLocation').value = profileData.location || 'New Delhi, India';
+            document.getElementById('inputRole').value = profileData.role || 'Full Stack Software Engineer';
+
+            document.getElementById('inputGithub').value = profileData.github || 'https://github.com/nishi-18777';
+            document.getElementById('inputLeetcode').value = profileData.leetcode || 'https://leetcode.com/username';
+            document.getElementById('inputLinkedin').value = profileData.linkedin || 'https://linkedin.com/in/username';
+            document.getElementById('inputPortfolio').value = profileData.portfolio || 'https://resumespark.app';
+
+            document.getElementById('inputCollege').value = profileData.college || 'Delhi Technological University (DTU)';
+            document.getElementById('inputDegree').value = profileData.degree || 'B.Tech in Computer Science & Engineering';
+            document.getElementById('inputGradYear').value = profileData.gradYear || '2024';
+            document.getElementById('inputGpa').value = profileData.gpa || '8.85 / 10.0';
+
+            document.getElementById('inputBio').value = profileData.bio || 'Results-driven Computer Science graduate with strong command of Data Structures & Algorithms, Full-Stack Web Development, and Cloud infrastructure. Demonstrated expertise in slashing API latency by 38% and engineering microservices supporting 45,000+ monthly active users.';
+
+            if (profileData.skills && Array.isArray(profileData.skills) && profileData.skills.length > 0) {
+                currentSkills = profileData.skills;
             }
+            renderSkills();
 
-            // Load all resumes
-            loadUserResumes();
-        });
-
-        // Load resumes from database
-        async function loadUserResumes() {
-            const resumesGrid = document.getElementById('resumesGrid');
-            resumesGrid.innerHTML = `
-                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                    <p>Loading your saved resumes...</p>
-                </div>
-            `;
-
-            try {
-                const response = await fetch('/api/resumes/my-resumes');
-                const data = await response.json();
-
-                if (data.success && data.resumes && data.resumes.length > 0) {
+            // Load Saved Resumes Count
+            fetch('/api/resumes/my-resumes').then(res => res.json()).then(data => {
+                if (data.success && data.resumes) {
                     document.getElementById('statsResumeCount').textContent = data.resumes.length;
-                    resumesGrid.innerHTML = ''; // clear grid
-
-                    data.resumes.forEach(resume => {
-                        const meta = templateMetadata[resume.templateId] || { 
-                            name: `Template - ${resume.templateId}`, 
-                            img: 'assets/pic 1.png' 
-                        };
-
-                        const card = document.createElement('div');
-                        card.className = 'resume-card';
-                        card.id = `resume-card-${resume.templateId}`;
-                        card.innerHTML = `
-                            <div class="resume-thumbnail-wrapper">
-                                <img src="${meta.img}" alt="${meta.name}" class="resume-thumbnail" onerror="this.src='assets/pic 1.png'">
-                            </div>
-                            <div class="resume-card-details">
-                                <h3 class="resume-name">${meta.name}</h3>
-                                <p class="resume-date">Last saved: ${formatDate(resume.updatedAt)}</p>
-                                <div class="resume-actions">
-                                    <a href="${resume.templateId}.html" class="btn-edit">
-                                        <i class="fas fa-edit"></i> Edit Resume
-                                    </a>
-                                    <button class="btn-delete" onclick="deleteResume('${resume.templateId}')" title="Delete Saved Resume">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                        resumesGrid.appendChild(card);
-                    });
-                } else {
-                    renderEmptyState();
                 }
-            } catch (err) {
-                console.error('Error fetching resumes:', err);
-                renderEmptyState();
-            }
-        }
+            }).catch(() => {});
 
-        function renderEmptyState() {
-            document.getElementById('statsResumeCount').textContent = '0';
-            const resumesGrid = document.getElementById('resumesGrid');
-            resumesGrid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-folder-open"></i>
-                    <h3>No saved resumes yet</h3>
-                    <p>Select one of our professional templates and start building your resume today.</p>
-                    <a href="templates.html" class="btn-create">Create A Resume</a>
-                </div>
-            `;
-        }
-
-        // Delete Resume function
-        async function deleteResume(templateId) {
-            const meta = templateMetadata[templateId] || { name: templateId };
-            if (!confirm(`Are you sure you want to delete your saved "${meta.name}"?`)) {
-                return;
-            }
-
-            try {
-                const response = await fetch(`/api/resumes/delete/${templateId}`, {
-                    method: 'DELETE'
+            // 2. Skills Tag Management
+            function renderSkills() {
+                const container = document.getElementById('skillsTagContainer');
+                container.innerHTML = '';
+                currentSkills.forEach((skill, idx) => {
+                    const tag = document.createElement('span');
+                    tag.className = 'skill-tag';
+                    tag.innerHTML = `
+                        ${escapeHtml(skill)}
+                        <span class="remove-skill" onclick="removeSkill(${idx})"><i class="fas fa-times"></i></span>
+                    `;
+                    container.appendChild(tag);
                 });
-                const data = await response.json();
-
-                if (data.success) {
-                    // Remove card from UI with a nice fadeout transition
-                    const card = document.getElementById(`resume-card-${templateId}`);
-                    if (card) {
-                        card.style.transition = 'all 0.5s ease';
-                        card.style.opacity = '0';
-                        card.style.transform = 'scale(0.8)';
-                        setTimeout(() => {
-                            card.remove();
-                            // Reload check
-                            const count = parseInt(document.getElementById('statsResumeCount').textContent) - 1;
-                            document.getElementById('statsResumeCount').textContent = count;
-                            if (count <= 0) {
-                                renderEmptyState();
-                            }
-                        }, 500);
-                    }
-                } else {
-                    alert(`Failed to delete: ${data.message}`);
-                }
-            } catch (err) {
-                console.error('Error deleting resume:', err);
-                alert('Error deleting resume. Please try again.');
             }
-        }
+
+            window.removeSkill = function(index) {
+                currentSkills.splice(index, 1);
+                renderSkills();
+            };
+
+            const btnAddSkill = document.getElementById('btnAddSkill');
+            const newSkillInput = document.getElementById('newSkillInput');
+
+            function addSkill() {
+                const val = newSkillInput.value.trim();
+                if (val && !currentSkills.includes(val)) {
+                    currentSkills.push(val);
+                    renderSkills();
+                    newSkillInput.value = '';
+                }
+            }
+
+            btnAddSkill.addEventListener('click', addSkill);
+            newSkillInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkill();
+                }
+            });
+
+            // 3. Save Profile Handler
+            const btnSaveProfile = document.getElementById('btnSaveProfile');
+            btnSaveProfile.addEventListener('click', () => {
+                const updatedFirstName = document.getElementById('inputFirstName').value.trim();
+                const updatedLastName = document.getElementById('inputLastName').value.trim();
+                const updatedEmail = document.getElementById('inputEmail').value.trim();
+                const updatedRole = document.getElementById('inputRole').value.trim();
+                const updatedPhone = document.getElementById('inputPhone').value.trim();
+                const updatedLocation = document.getElementById('inputLocation').value.trim();
+                const updatedGithub = document.getElementById('inputGithub').value.trim();
+                const updatedLeetcode = document.getElementById('inputLeetcode').value.trim();
+                const updatedLinkedin = document.getElementById('inputLinkedin').value.trim();
+                const updatedPortfolio = document.getElementById('inputPortfolio').value.trim();
+                const updatedCollege = document.getElementById('inputCollege').value.trim();
+                const updatedDegree = document.getElementById('inputDegree').value.trim();
+                const updatedGradYear = document.getElementById('inputGradYear').value.trim();
+                const updatedGpa = document.getElementById('inputGpa').value.trim();
+                const updatedBio = document.getElementById('inputBio').value.trim();
+
+                const updatedProfile = {
+                    firstName: updatedFirstName,
+                    lastName: updatedLastName,
+                    email: updatedEmail,
+                    role: updatedRole,
+                    phone: updatedPhone,
+                    location: updatedLocation,
+                    github: updatedGithub,
+                    leetcode: updatedLeetcode,
+                    linkedin: updatedLinkedin,
+                    portfolio: updatedPortfolio,
+                    college: updatedCollege,
+                    degree: updatedDegree,
+                    gradYear: updatedGradYear,
+                    gpa: updatedGpa,
+                    bio: updatedBio,
+                    skills: currentSkills
+                };
+
+                localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
+
+                // Also update currentUser username / email if changed
+                currentUser.username = `${updatedFirstName} ${updatedLastName}`.trim() || currentUser.username;
+                currentUser.email = updatedEmail || currentUser.email;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                // Update Hero View
+                document.getElementById('nameDisplay').textContent = currentUser.username;
+                document.getElementById('emailDisplay').textContent = currentUser.email;
+                document.getElementById('roleDisplay').textContent = updatedRole;
+                document.getElementById('avatarDisplay').textContent = updatedFirstName.charAt(0).toUpperCase() || 'U';
+
+                showToast('Profile updated & synchronized successfully!');
+            });
+
+            function showToast(msg) {
+                const toast = document.getElementById('toastNotify');
+                document.getElementById('toastMsg').textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return str.replace(/[&<>'"]/g, tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag));
+            }
+        });
     </script>
 </body>
 </html>

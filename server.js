@@ -102,6 +102,11 @@ app.get(
 );
 
 app.get(
+  '/saved-resumes.html',
+  protectPage('saved-resumes.html')
+);
+
+app.get(
   '/page2.html',
   protectPage('page2.html')
 );

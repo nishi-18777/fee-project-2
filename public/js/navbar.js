@@ -8,6 +8,13 @@
         document.head.appendChild(fa);
     }
 
+    // 1b. Inject animated cyber background if not present
+    if (!document.querySelector('script[src*="particles-bg.js"]')) {
+        const bgScript = document.createElement('script');
+        bgScript.src = 'js/particles-bg.js';
+        document.head.appendChild(bgScript);
+    }
+
     // 2. Fetch login state
     let currentUser = null;
     try {
@@ -30,6 +37,7 @@
 
         const currentPage = window.location.pathname.split('/').pop() || 'login page.html';
         const isProfileActive = currentPage === 'profile.html' ? 'active' : '';
+        const isSavedActive = currentPage === 'saved-resumes.html' ? 'active' : '';
         const isTemplatesActive = currentPage === 'templates.html' ? 'active' : '';
         const isHomeActive = currentPage === 'page2.html' ? 'active' : '';
         const isAtsActive = currentPage === 'ats-checker.html' ? 'active' : '';
@@ -47,7 +55,7 @@
                     <li><a href="templates.html" class="${isTemplatesActive}">Templates</a></li>
                     <li><a href="ats-checker.html" class="${isAtsActive}">ATS Checker</a></li>
                     <li><a href="profile.html" class="${isProfileActive}">My Profile</a></li>
-                    <li><a href="profile.html#saved-resumes" class="${currentPage === 'profile.html' && window.location.hash === '#saved-resumes' ? 'active' : ''}">Saved Resumes</a></li>
+                    <li><a href="saved-resumes.html" class="${isSavedActive}">Saved Resumes</a></li>
                 </ul>
             `;
         }
@@ -73,7 +81,7 @@
                         <a href="profile.html" class="dropdown-item">
                             <i class="fas fa-user-circle"></i> My Profile
                         </a>
-                        <a href="profile.html#saved-resumes" class="dropdown-item">
+                        <a href="saved-resumes.html" class="dropdown-item">
                             <i class="fas fa-file-alt"></i> Saved Resumes
                         </a>
                         <a href="templates.html" class="dropdown-item">
