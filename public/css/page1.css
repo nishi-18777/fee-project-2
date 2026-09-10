@@ -2,7 +2,7 @@
   --primary-color: #00f2fe;
   --secondary-color: #0083b0;
   --bg-dark: #030303;
-  --card-bg: rgba(12, 12, 14, 0.85);
+  --card-bg: rgba(12, 14, 20, 0.88);
   --input-bg: rgba(255, 255, 255, 0.04);
   --text-primary: #ffffff;
   --text-secondary: #8a99ad;
@@ -12,14 +12,9 @@
   --white: #ffffff;
   --gray: #efefef;
   --gray-2: #757575;
-
-  --facebook-color: #4267B2;
-  --google-color: #DB4437;
-  --twitter-color: #1DA1F2;
-  --insta-color: #E1306C;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
 * {
   font-family: 'Poppins', sans-serif;
@@ -30,26 +25,40 @@
 
 html,
 body {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  width: 100%;
   background-color: var(--bg-dark);
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
 
 .container {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
-  background: linear-gradient(rgba(3, 3, 3, 0.65), rgba(3, 3, 3, 0.65)), url('../assets/neon_teal_bg.jpg') no-repeat center center / cover;
+  width: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(rgba(3, 3, 3, 0.72), rgba(3, 3, 3, 0.72)), url('../assets/neon_teal_bg.jpg') no-repeat center center / cover;
 }
 
+/* Base 2-Column Row for Desktop */
 .row {
   display: flex;
   flex-wrap: wrap;
-  height: 100vh;
+  min-height: 100vh;
+  padding-top: 70px; /* Clearance for fixed top navbar */
+  align-items: center;
+  position: relative;
+  z-index: 5;
 }
 
 .col {
   width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 7;
+  padding: 1.5rem;
 }
 
 .align-items-center {
@@ -59,30 +68,34 @@ body {
   text-align: center;
 }
 
-.form-wrapper {
-  width: 100%;
-  max-width: 28rem;
+.flex-col {
+  flex-direction: column;
 }
 
+.form-wrapper {
+  width: 100%;
+  max-width: 27.5rem;
+}
+
+/* The Card */
 .form {
-  padding: 2.5rem 2rem;
+  padding: 2.2rem 2rem;
   background-color: var(--card-bg);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-radius: 1.5rem;
   width: 100%;
   border: 1px solid rgba(0, 242, 254, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 25px rgba(0, 242, 254, 0.15);
-  transform: scale(0);
-  transition: .5s ease-in-out;
-  transition-delay: 1s;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 254, 0.15);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  position: relative;
 }
 
 .form-title {
   color: var(--text-primary);
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.3rem;
   text-align: center;
   letter-spacing: 0.5px;
 }
@@ -109,28 +122,29 @@ body {
   100% { transform: rotate( 0.0deg) }
 }
 
+/* Input Styles */
 .input-group {
   position: relative;
   width: 100%;
-  margin: 1.2rem 0;
+  margin: 1.1rem 0;
 }
 
 .input-group i {
   position: absolute;
   top: 50%;
-  left: 1.2rem;
+  left: 1.15rem;
   transform: translateY(-50%);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: var(--primary-color);
   text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
 }
 
 .input-group input {
   width: 100%;
-  padding: 1rem 1rem 1rem 3.2rem;
+  padding: 0.95rem 1rem 0.95rem 3.1rem;
   font-size: 0.95rem;
   background-color: var(--input-bg);
-  border-radius: .6rem;
+  border-radius: 0.65rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-primary);
   outline: none;
@@ -143,28 +157,30 @@ body {
 
 .input-group input:focus {
   border: 1px solid var(--primary-color);
-  box-shadow: 0 0 10px rgba(0, 242, 254, 0.25);
-  background-color: rgba(10, 22, 30, 0.85);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+  background-color: rgba(10, 22, 30, 0.9);
 }
 
+/* Primary Button */
 .form button {
   cursor: pointer;
   width: 100%;
-  padding: .8rem 0;
-  border-radius: .6rem;
+  padding: 0.85rem 0;
+  border-radius: 0.65rem;
   border: none;
   background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
   color: #050d12;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   outline: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+  margin-top: 0.4rem;
 }
 
 .form button:hover {
   background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-  box-shadow: 0 4px 20px rgba(0, 242, 254, 0.45);
+  box-shadow: 0 4px 22px rgba(0, 242, 254, 0.5);
   transform: translateY(-1px);
 }
 
@@ -172,9 +188,47 @@ body {
   transform: translateY(1px);
 }
 
+/* Guest Demo Mode Button */
+.guest-btn {
+  margin-top: 10px !important;
+  width: 100%;
+  padding: 10px !important;
+  border-radius: 8px !important;
+  border: 1.5px solid var(--primary-color) !important;
+  background: rgba(0, 242, 242, 0.08) !important;
+  color: var(--primary-color) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: all 0.3s ease !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: none !important;
+}
+
+.guest-btn:hover {
+  background: rgba(0, 242, 254, 0.18) !important;
+  border-color: #00f2fe !important;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.35) !important;
+  transform: translateY(-1px) !important;
+  color: #ffffff !important;
+}
+
+/* Google Sign-in Container */
+#google-signin-btn-login,
+#google-signin-btn-signup {
+  margin: 14px 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* Helper Text & Links */
 .form p {
-  margin: 1.2rem 0;
-  font-size: .85rem;
+  margin: 1rem 0;
+  font-size: 0.86rem;
   color: var(--text-secondary);
 }
 
@@ -187,6 +241,7 @@ body {
   font-weight: 600;
   margin-left: 5px;
   transition: color 0.3s ease;
+  cursor: pointer;
 }
 
 .form p b.pointer:hover {
@@ -199,6 +254,7 @@ body {
   text-decoration: none;
   font-size: 0.85rem;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .forgot-pw:hover {
@@ -206,251 +262,365 @@ body {
   text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
 }
 
-.flex-col {
-  flex-direction: column;
-}
-
-.social-list {
-  margin: 2rem 0;
-  padding: 1rem;
-  border-radius: 1.5rem;
-  width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  transform: scale(0);
-  transition: .5s ease-in-out;
-  transition-delay: 1.2s;
-}
-
-.social-list>div {
-  color: var(--white);
-  margin: 0 .5rem;
-  padding: .7rem;
-  cursor: pointer;
-  border-radius: .5rem;
-  cursor: pointer;
-  transform: scale(0);
-  transition: .5s ease-in-out;
-}
-
-.social-list>div:nth-child(1) {
-  transition-delay: 1.4s;
-}
-
-.social-list>div:nth-child(2) {
-  transition-delay: 1.6s;
-}
-
-.social-list>div:nth-child(3) {
-  transition-delay: 1.8s;
-}
-
-.social-list>div:nth-child(4) {
-  transition-delay: 2s;
-}
-
-.social-list>div>i {
-  font-size: 1.5rem;
-  transition: .4s ease-in-out;
-}
-
-.social-list>div:hover i {
-  transform: scale(1.5);
-}
-
-.facebook-bg {
-  background-color: var(--facebook-color);
-}
-
-.google-bg {
-  background-color: var(--google-color);
-}
-
-.twitter-bg {
-  background-color: var(--twitter-color);
-}
-
-.insta-bg {
-  background-color: var(--insta-color);
-}
-
 .pointer {
   cursor: pointer;
 }
 
-.container.sign-in .form.sign-in,
-.container.sign-in .social-list.sign-in,
-.container.sign-in .social-list.sign-in>div,
-.container.sign-up .form.sign-up,
-.container.sign-up .social-list.sign-up,
-.container.sign-up .social-list.sign-up>div {
-  transform: scale(1);
-}
-
-.content-row {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 6;
-  width: 100%;
-}
-
-.text {
-  margin: 4rem;
-  color: var(--white);
-  text-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-}
-
-.text h2 {
-  font-size: 4rem;
-  font-weight: 800;
-  margin: 2rem 0;
-  line-height: 1.15;
-  transition: 1s ease-in-out;
-}
-
-.text p {
-  font-weight: 500;
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  transition: 1s ease-in-out;
-  transition-delay: .2s;
-}
-
-.text .highlight {
-  color: var(--primary-color);
-  text-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
-}
-
-.img img {
-  width: 30vw;
-  transition: 1s ease-in-out;
-  transition-delay: .4s;
-}
-
-.text.sign-in h2,
-.text.sign-in p,
-.img.sign-in img {
-  transform: translateX(-250%);
-}
-
-.text.sign-up h2,
-.text.sign-up p,
-.img.sign-up img {
-  transform: translateX(250%);
-}
-
-.container.sign-in .text.sign-in h2,
-.container.sign-in .text.sign-in p,
-.container.sign-in .img.sign-in img,
-.container.sign-up .text.sign-up h2,
-.container.sign-up .text.sign-up p,
-.container.sign-up .img.sign-up img {
-  transform: translateX(0);
-}
-
-/* BACKGROUND */
-
-.container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: 300vw;
-  transform: translate(35%, 0);
-  background: linear-gradient(-45deg, rgba(2, 2, 2, 0.65) 0%, rgba(5, 5, 5, 0.9) 100%);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  transition: 1s ease-in-out;
-  z-index: 6;
-  border-left: 1px solid rgba(0, 242, 254, 0.15);
-  border-right: 1px solid rgba(0, 242, 254, 0.15);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-  border-bottom-right-radius: max(50vw, 50vh);
-  border-top-left-radius: max(50vw, 50vh);
-}
-
-.container.sign-in::before {
-  transform: translate(0, 0);
-  right: 50%;
-}
-
-.container.sign-up::before {
-  transform: translate(100%, 0);
-  right: 50%;
-}
-
-/* RESPONSIVE */
-
-@media only screen and (max-width: 768px) {
-
-  .container::before,
-  .container.sign-in::before,
-  .container.sign-up::before {
-      height: 100vh;
-      border-bottom-right-radius: 0;
-      border-top-left-radius: 0;
-      z-index: 0;
-      transform: none;
-      right: 0;
+/* ==============================================================
+   DESKTOP SLIDING LAYOUT MECHANISM (> 1024px)
+   ============================================================== */
+@media screen and (min-width: 1025px) {
+  .container.sign-in .form.sign-in {
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  /* .container.sign-in .col.sign-up {
-      transform: translateY(100%);
-  } */
-
-  .container.sign-in .col.sign-in,
-  .container.sign-up .col.sign-up {
-      transform: translateY(0);
+  .container.sign-in .form.sign-up {
+    transform: scale(0.9);
+    opacity: 0;
+    pointer-events: none;
   }
 
+  .container.sign-up .form.sign-up {
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .container.sign-up .form.sign-in {
+    transform: scale(0.9);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Content Row (Text on the other side of the form) */
   .content-row {
-      align-items: flex-start !important;
-  }
-
-  .content-row .col {
-      transform: translateY(0);
-      background-color: unset;
-  }
-
-  .col {
-      width: 100%;
-      position: absolute;
-      padding: 2rem;
-      background-color: rgba(10, 22, 30, 0.95);
-      border-top-left-radius: 2rem;
-      border-top-right-radius: 2rem;
-      transform: translateY(100%);
-      transition: 1s ease-in-out;
-  }
-
-  .row {
-      align-items: flex-end;
-      justify-content: flex-end;
-  }
-
-  .form,
-  .social-list {
-      box-shadow: none;
-      margin: 0;
-      padding: 0;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    pointer-events: none;
+    z-index: 6;
+    width: 100%;
+    height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
   }
 
   .text {
-      margin: 0;
-  }
-
-  .text p {
-      display: none;
+    margin: 3.5rem;
+    color: var(--white);
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
   }
 
   .text h2 {
-      margin: .5rem;
-      font-size: 2rem;
+    font-size: 3.3rem;
+    font-weight: 800;
+    margin: 1.5rem 0;
+    line-height: 1.18;
+    transition: 1s ease-in-out;
+  }
+
+  .text p {
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    transition: 1s ease-in-out;
+    transition-delay: .2s;
+  }
+
+  .text .highlight {
+    color: var(--primary-color);
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+  }
+
+  .text.sign-in h2,
+  .text.sign-in p {
+    transform: translateX(-250%);
+  }
+
+  .text.sign-up h2,
+  .text.sign-up p {
+    transform: translateX(250%);
+  }
+
+  .container.sign-in .text.sign-in h2,
+  .container.sign-in .text.sign-in p,
+  .container.sign-up .text.sign-up h2,
+  .container.sign-up .text.sign-up p {
+    transform: translateX(0);
+  }
+
+  /* Curved Animated Background Divider */
+  .container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 300vw;
+    transform: translate(35%, 0);
+    background: linear-gradient(-45deg, rgba(2, 2, 2, 0.7) 0%, rgba(5, 5, 5, 0.92) 100%);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    transition: 1s ease-in-out;
+    z-index: 6;
+    border-left: 1px solid rgba(0, 242, 254, 0.15);
+    border-right: 1px solid rgba(0, 242, 254, 0.15);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    border-bottom-right-radius: max(50vw, 50vh);
+    border-top-left-radius: max(50vw, 50vh);
+  }
+
+  .container.sign-in::before {
+    transform: translate(0, 0);
+    right: 50%;
+  }
+
+  .container.sign-up::before {
+    transform: translate(100%, 0);
+    right: 50%;
   }
 }
-a{
-  text-decoration: none;
-  color:#000000
+
+/* ==============================================================
+   TABLET RESPONSIVENESS (769px to 1024px)
+   ============================================================== */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  /* Hide the 300vw background & floating text to avoid cutoffs */
+  .container::before {
+    display: none !important;
+  }
+
+  .content-row {
+    display: none !important;
+  }
+
+  .container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 95px 24px 50px;
+    overflow-y: auto;
+  }
+
+  .row {
+    width: 100%;
+    min-height: unset;
+    height: auto;
+    padding-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .col {
+    width: 100%;
+    max-width: 460px;
+    padding: 0;
+    transform: none !important;
+  }
+
+  .container.sign-in .col.sign-up {
+    display: none !important;
+  }
+
+  .container.sign-in .col.sign-in {
+    display: flex !important;
+    animation: fadeInTablet 0.35s ease forwards;
+  }
+
+  .container.sign-up .col.sign-in {
+    display: none !important;
+  }
+
+  .container.sign-up .col.sign-up {
+    display: flex !important;
+    animation: fadeInTablet 0.35s ease forwards;
+  }
+
+  .form {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    padding: 2.5rem 2.2rem;
+  }
+
+  @keyframes fadeInTablet {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+/* ==============================================================
+   MOBILE PHONES RESPONSIVENESS (<= 768px)
+   Solves the "Spark!" cutoff and misalignment
+   ============================================================== */
+@media only screen and (max-width: 768px) {
+  /* 1. Eliminate background floating text completely on mobile */
+  .content-row {
+    display: none !important;
+  }
+
+  /* 2. Eliminate 300vw curved divider that caused overflow/misalignment */
+  .container::before,
+  .container.sign-in::before,
+  .container.sign-up::before {
+    display: none !important;
+  }
+
+  /* 3. Container & Scrolling */
+  html,
+  body {
+    height: 100%;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .container {
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 85px 16px 45px; /* 85px clears navbar cleanly, 45px prevents safari bottom bar overlap */
+  }
+
+  .row {
+    width: 100%;
+    min-height: unset;
+    height: auto;
+    padding-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* 4. Column & Single-Card Active View */
+  .col {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    padding: 0;
+    transform: none !important;
+    background: transparent;
+  }
+
+  .container.sign-in .col.sign-up {
+    display: none !important;
+  }
+
+  .container.sign-in .col.sign-in {
+    display: flex !important;
+    animation: fadeInMobile 0.3s ease forwards;
+  }
+
+  .container.sign-up .col.sign-in {
+    display: none !important;
+  }
+
+  .container.sign-up .col.sign-up {
+    display: flex !important;
+    animation: fadeInMobile 0.3s ease forwards;
+  }
+
+  @keyframes fadeInMobile {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 5. Mobile Card Adjustments */
+  .form-wrapper {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .form {
+    padding: 1.85rem 1.45rem;
+    border-radius: 1.3rem;
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    transition: none;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 242, 254, 0.12);
+  }
+
+  .form-title {
+    font-size: 1.55rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .input-group {
+    margin: 0.85rem 0;
+  }
+
+  .input-group input {
+    padding: 0.82rem 0.9rem 0.82rem 2.85rem;
+    font-size: 0.92rem;
+  }
+
+  .input-group i {
+    font-size: 1.15rem;
+    left: 1rem;
+  }
+
+  .form button {
+    padding: 0.8rem 0;
+    font-size: 1rem;
+    margin-top: 0.35rem;
+  }
+
+  .guest-btn {
+    padding: 0.75rem !important;
+    font-size: 0.88rem !important;
+    margin-top: 8px !important;
+  }
+
+  #google-signin-btn-login,
+  #google-signin-btn-signup {
+    margin: 12px 0 !important;
+  }
+
+  .form p {
+    margin: 0.9rem 0;
+    font-size: 0.83rem;
+  }
+}
+
+/* Very Small Mobile Screens (iPhone SE, Galaxy Fold collapsed, width <= 360px) */
+@media only screen and (max-width: 360px) {
+  .form {
+    padding: 1.5rem 1.1rem;
+    border-radius: 1.1rem;
+  }
+
+  .form-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .input-group input {
+    padding: 0.75rem 0.8rem 0.75rem 2.6rem;
+    font-size: 0.88rem;
+  }
+
+  .input-group i {
+    font-size: 1.05rem;
+    left: 0.85rem;
+  }
+
+  .form button {
+    padding: 0.75rem 0;
+    font-size: 0.95rem;
+  }
 }

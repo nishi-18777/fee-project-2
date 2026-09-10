@@ -1,11 +1,16 @@
 let container = document.getElementById('container');
 
-toggle = () => {
+window.toggle = () => {
+	if (!container) container = document.getElementById('container');
+	if (!container) return;
 	container.classList.toggle('sign-in');
 	container.classList.toggle('sign-up');
+	window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 setTimeout(() => {
+	if (!container) container = document.getElementById('container');
+	if (!container) return;
 	const params = new URLSearchParams(window.location.search);
 	if (params.get('action') === 'signup') {
 		container.classList.remove('sign-in');
@@ -14,7 +19,7 @@ setTimeout(() => {
 		container.classList.remove('sign-up');
 		container.classList.add('sign-in');
 	}
-}, 200);
+}, 150);
 
 // Authentication Client Logic
 document.addEventListener('DOMContentLoaded', () => {
