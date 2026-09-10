@@ -45,30 +45,34 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFile = null;
     let showingRawText = false;
 
-    // High-Scoring Benchmark Sample Resume (98/100 ATS Optimized for Students)
-    const SAMPLE_RESUME_TEXT = `Nishi Dhiman
+    // 100% Recruiter-Approved ATS Benchmark Requirements (Everything Required for 100/100 ATS Score)
+    const ATS_BENCHMARK_REQUIREMENTS_TEXT = `YOUR FULL NAME (FIRST & LAST NAME REQUIRED)
 Full Stack Software Engineer | Computer Science & Engineering
-Email: nishi.dhiman@example.com | Phone: +91 98765 43210
-LinkedIn: linkedin.com/in/nishidhiman | GitHub: github.com/nishi-18777 | LeetCode: leetcode.com/nishidhiman
+Email: your.professional.email@gmail.com | Phone: +91 98765 43210
+LinkedIn: linkedin.com/in/your-profile | GitHub: github.com/your-username | LeetCode: leetcode.com/your-profile
 New Delhi, India
 
 PROFESSIONAL SUMMARY
-Results-driven Computer Science graduate with strong command of Data Structures & Algorithms, Full-Stack Web Development, and Cloud infrastructure. Proven track record of architecting scalable applications using React, Node.js, Express, and MongoDB. Demonstrated expertise in slashing API latency by 38% and engineering microservices supporting 45,000+ monthly active users.
+[REQUIRED: 3-4 Concise Lines Highlighting Core Skills, Quantified Results & Scale]
+Results-driven Computer Science graduate specializing in Data Structures & Algorithms, Full-Stack Web Development, and Cloud infrastructure. Demonstrated expertise in building scalable web applications using React, Node.js, Express, and MongoDB. Proven track record of slashing API latency by 38% and engineering resilient microservices supporting 45,000+ monthly active users.
 
 EDUCATION
+[REQUIRED: College Degree, University, Graduation Year & Target CGPA > 8.0]
 Bachelor of Technology in Computer Science & Engineering
 Delhi Technological University (DTU), New Delhi | 2020 - 2024
 CGPA: 8.85 / 10.0 | Relevant Coursework: Data Structures & Algorithms, DBMS, Operating Systems, Computer Networks, OOP
 
 TECHNICAL SKILLS
+[REQUIRED: Categorized Skills - Languages, Frameworks, Databases & CS Core Coursework]
 - Programming Languages: JavaScript (ES6+), TypeScript, Python, C++, Java, SQL, HTML5, CSS3
 - Web & Backend Frameworks: React.js, Next.js, Node.js, Express.js, Redux Toolkit, TailwindCSS, RESTful APIs
 - Databases & Cloud: MongoDB, PostgreSQL, Redis, AWS (S3, EC2), Docker, Git, GitHub Actions, Vercel
 - Core CS Fundamentals: Data Structures, Algorithms, Object-Oriented Programming (OOP), System Design, DBMS
 
 TECHNICAL PROJECTS
+[REQUIRED: Minimum 2 In-Depth Projects with Tech Stack Header & Live Demo/GitHub URLs]
 Resume Spark - AI Resume Builder & ATS Scanner
-Live Demo: resumespark.app | GitHub: github.com/nishi-18777/resume-spark
+Live Demo: resumespark.app | GitHub: github.com/your-username/resume-spark
 Tech Stack: React, Node.js, Express, MongoDB, PDF.js, JWT Authentication
 - Architected and deployed an interactive web application that evaluates candidate resumes against enterprise ATS algorithms in real-time.
 - Engineered 14+ RESTful API endpoints with JWT session authentication, reducing API response times by 35%.
@@ -76,13 +80,14 @@ Tech Stack: React, Node.js, Express, MongoDB, PDF.js, JWT Authentication
 - Automated CI/CD deployment pipelines using GitHub Actions and Docker, accelerating release cycles by 40%.
 
 Cloud Commerce - Scalable E-Commerce Microservices
-Live Demo: cloudcommerce.app | GitHub: github.com/nishi-18777/cloud-commerce
+Live Demo: cloudcommerce.app | GitHub: github.com/your-username/cloud-commerce
 Tech Stack: TypeScript, Next.js, PostgreSQL, Redis, Stripe API
 - Developed a high-throughput e-commerce platform processing 1,200+ daily mock transactions with sub-second checkout speeds.
 - Integrated Redis in-memory caching for product catalog queries, boosting server throughput by 55% during peak loads.
 - Designed responsive user interface components adhering to WCAG 2.1 accessibility guidelines, elevating Lighthouse performance score to 99/100.
 
 WORK EXPERIENCE / INTERNSHIPS
+[REQUIRED: Power Action Verbs + Google X-Y-Z Measurable Scale (%, Numbers, Speedups)]
 Software Development Engineer Intern | TechSpark Solutions
 January 2024 - June 2024 | New Delhi, India
 - Spearheaded the redesign of client analytics dashboard utilizing React and TailwindCSS, adopted by 30+ enterprise clients.
@@ -90,6 +95,7 @@ January 2024 - June 2024 | New Delhi, India
 - Authored comprehensive unit tests with Jest and Supertest, elevating test coverage from 62% to 88%.
 
 ACHIEVEMENTS & CERTIFICATIONS
+[REQUIRED: DSA Problem-Solving Counts & Validated Hackathon / Tech Achievements]
 - Solved 450+ Data Structures and Algorithms problems on LeetCode and GeeksforGeeks (Contest Rating: 1820+).
 - Finalist in Smart India Hackathon (SIH 2023) among 1,500+ competing collegiate engineering teams.`;
 
@@ -136,9 +142,9 @@ ACHIEVEMENTS & CERTIFICATIONS
         btnAnalyze.disabled = false;
     }
 
-    // "Try with Sample Resume" Button
+    // "What's Important for Resume" Button
     btnSample.addEventListener('click', () => {
-        runAnalysis(SAMPLE_RESUME_TEXT, 'Sample Candidate Resume - Nishi Dhiman');
+        runAnalysis(ATS_BENCHMARK_REQUIREMENTS_TEXT, "What Recruiters & ATS Require (100% Benchmark)");
     });
 
     // "Calculate ATS Score" Button
@@ -357,10 +363,20 @@ ACHIEVEMENTS & CERTIFICATIONS
         if (items.length === 0) return '';
         let bodyHtml = '';
 
+        // Extract and render requirement hints (e.g., [REQUIRED: ...])
+        const contentItems = [];
+        items.forEach(item => {
+            if (/^\[REQUIRED:/i.test(item.trim())) {
+                bodyHtml += `<div class="doc-requirement-hint"><i class="fas fa-check-circle"></i> ${escapeHtml(item.replace(/[\[\]]/g, '').trim())}</div>`;
+            } else {
+                contentItems.push(item);
+            }
+        });
+
         if (/SUMMARY|PROFILE|OBJECTIVE/i.test(section)) {
-            bodyHtml += `<p class="doc-summary-text">${items.map(escapeHtml).join(' ')}</p>`;
+            bodyHtml += `<p class="doc-summary-text">${contentItems.map(escapeHtml).join(' ')}</p>`;
         } else if (/SKILL/i.test(section)) {
-            items.forEach(item => {
+            contentItems.forEach(item => {
                 const splitIndex = item.indexOf(':');
                 if (splitIndex !== -1) {
                     const label = item.substring(0, splitIndex).replace(/^[-•*]\s*/, '').trim();
@@ -379,7 +395,7 @@ ACHIEVEMENTS & CERTIFICATIONS
             // Projects or Experience or Education
             let inBullets = false;
 
-            items.forEach(item => {
+            contentItems.forEach(item => {
                 const isBullet = /^[-•*]/.test(item);
 
                 if (isBullet) {
